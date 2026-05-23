@@ -1,0 +1,117 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "restaurants": "Restaurants",
+    "streams": "Vidéos en Direct",
+    "cart": "Panier",
+    "dashboard": "Tableau de Bord",
+    "admin": "Administration",
+    "login": "Connexion",
+    "signup": "S'inscrire",
+    "about": "À Propos",
+    "contact": "Contactez-nous"
+  },
+  "home": {
+    "hero": {
+      "platform": "Plateforme Officielle FoodNet",
+      "slides": [
+        {
+          "title": "SAVOUREZ LE CŒUR DU RWANDA",
+          "subtitle": "Découvrez les trésors culinaires les plus raffinés de Kirehe."
+        },
+        {
+          "title": "FRAIS DE NOS FERMES LOCALES",
+          "subtitle": "Soutenir nos agriculteurs locaux, une assiette après l'autre."
+        },
+        {
+          "title": "MASTERCLASSES AVEC NOS CHEFS",
+          "subtitle": "Apprenez à cuisiner comme un professionnel grâce à nos diffusions en direct."
+        }
+      ],
+      "startOrdering": "Passer Commande",
+      "liveCooking": "Cuisine en Direct"
+    },
+    "popular": {
+      "tag": "Sélection Gastronomique",
+      "title": "Plats Populaires à",
+      "subtitle": "Découvrez les saveurs tendance du moment.",
+      "orderNow": "Commander Maintenant",
+      "topChoice": "Meilleur Choix"
+    },
+    "restaurants": {
+      "tag": "Joyaux Locaux",
+      "title": "La Meilleure Expérience Culinaire à Kirehe",
+      "description": "Nous collaborons avec les restaurants les plus authentiques du Rwanda. De la haute gastronomie au célèbre nyama choma de Kirehe.",
+      "partnerRestaurants": "Restaurants Partenaires",
+      "partnerRestaurantsDesc": "Accès à plus de 50 établissements premium",
+      "exclusiveDeals": "Offres Exclusives",
+      "exclusiveDealsDesc": "Économisez davantage avec les offres FoodNet"
+    },
+    "cta": {
+      "watchStreams": "Regarder les Directs",
+      "watchStreamsDesc": "Échangez avec nos chefs étoilés en temps réel. Découvrez les secrets de la gastronomie rwandaise.",
+      "watchNow": "Regarder en Direct",
+      "becomeChef": "Devenir Chef",
+      "becomeChefDesc": "Partagez votre passion. Mettez en avant vos talents et commencez à gagner sur FoodNet.",
+      "applyNow": "Postuler comme Chef"
+    }
+  },
+  "common": {
+    "welcome": "Bienvenue sur FoodNet",
+    "tagline": "Saveurs rwandaises, connexions mondiales.",
+    "order_now": "Commander Maintenant",
+    "sign_in": "Connexion",
+    "sign_up": "S'inscrire",
+    "logout": "Déconnexion",
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue",
+    "success": "Succès",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "back": "Retour",
+    "secureAuth": "Authentification Sécurisée",
+    "rwandaGateway": "Portail Rwanda"
+  },
+  "auth": {
+    "login": {
+      "title": "Bienvenue",
+      "subtitle": "Connectez-vous à votre compte FoodNet",
+      "emailLabel": "E-mail ou Nom d'utilisateur",
+      "passwordLabel": "Mot de passe",
+      "forgotPassword": "Mot de passe oublié ?",
+      "signIn": "Se Connecter",
+      "orContinueWith": "Ou continuer avec",
+      "google": "Google",
+      "newToFoodNet": "Nouveau sur FoodNet ?",
+      "createAccount": "Créer un compte",
+      "welcomeBackToast": "Heureux de vous revoir !",
+      "loginFailed": "Échec de l'authentification.",
+      "firstTimeAdmin": "Premier Administrateur ?",
+      "noAdminSet": "Aucun administrateur n'a été configuré. Créez votre compte maintenant.",
+      "setupAdmin": "Configurer le compte Admin"
+    },
+    "signup": {
+      "title": "Commencez Votre Aventure",
+      "subtitle": "Créez un compte pour commencer à commander",
+      "fullNameLabel": "Nom Complet",
+      "roleLabel": "Je souhaite être...",
+      "customer": "Client / Amateur de cuisine",
+      "chef": "Chef / Restaurant",
+      "createAccount": "Créer un compte",
+      "alreadyHaveAccount": "Vous avez déjà un compte ?",
+      "login": "Connexion"
+    }
+  },
+  "footer": {
+    "description": "La première plateforme alimentaire de Kirehe, reliant les passionnés de cuisine locale aux chefs étoilés et à la gastronomie rwandaise d'excellence.",
+    "navigation": "Navigation",
+    "legal": "Mentions Légales",
+    "kireheOffice": "Bureau de Kirehe",
+    "privacy": "Confidentialité",
+    "terms": "Conditions Générales",
+    "cookies": "Politique des Cookies",
+    "madeIn": "Fait avec passion à Kigali",
+    "digitalPlatform": "Plateforme Numérique",
+    "address": "Rue Principale, District de Kirehe, Rwanda"
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "nav": {
+    "home": "Ahabanza",
+    "restaurants": "Resititora",
+    "streams": "Live Streams",
+    "cart": "Agasanduku",
+    "dashboard": "Dashboard",
+    "admin": "Admin",
+    "login": "Injira",
+    "signup": "Iyandikishe",
+    "about": "Twebwe",
+    "contact": "Twandikire"
+  },
+  "home": {
+    "hero": {
+      "platform": "Urubuga rwa FoodNet rwemewe",
+      "slides": [
+        {
+          "title": "SOGONGERA UMUTIMA W'U RWANDA",
+          "subtitle": "Yungukira mu biribwa by'agahebuzo bya Kirehe."
+        },
+        {
+          "title": "IBIRIBWA BISHYA BIVA MU MIRIMA",
+          "subtitle": "Gushyigikira abahinzi bacu bo mu gace, isahane ku yindi."
+        },
+        {
+          "title": "WIGE GUTEKA N'ABATE_TSI B'INZOBERE",
+          "subtitle": "Wige guteka nk'umunyamwuga binyuze mu kurebera imbonankubone."
+        }
+      ],
+      "startOrdering": "Tangira Gutumiza",
+      "liveCooking": "Guteka Imbonankubone"
+    },
+    "popular": {
+      "tag": "Guhitamo neza",
+      "title": "Amafunguro akunzwe muri",
+      "subtitle": "Vumbura uburyohe bugezweho n'amafunguro meza.",
+      "orderNow": "Tumiza Amafunguro ubu",
+      "topChoice": "Icyatoranijwe cyane"
+    },
+    "restaurants": {
+      "tag": "Ibyiza by'iwacu",
+      "title": "Ubunararibonye bwiza bwo kurya muri Kirehe",
+      "description": "Dufatanya na resititora nziza cyane mu Rwanda. Uhereye ku mafunguro y'agaciro kugeza kuri nyama choma nziza muri Kirehe.",
+      "partnerRestaurants": "Resititora dufatanya",
+      "partnerRestaurantsDesc": "Gera kuri resititora 50+ nziza",
+      "exclusiveDeals": "Guhitamo kwihariye",
+      "exclusiveDealsDesc": "Zigama byinshi hamwe na FoodNet"
+    },
+    "cta": {
+      "watchStreams": "Reba Guteka Imbonankubone",
+      "watchStreamsDesc": "Huza n'abateitsi b'inzobere imbonankubone. Wige amabanga y'ikinyarwanda.",
+      "watchNow": "Reba ubu",
+      "becomeChef": "Ba Umutetsi",
+      "becomeChefDesc": "Sangira urukundo rwawe rw'ibiryo. Geza ubumenyi bwawe ku bandi kandi utangire kwinjiza kuri FoodNet.",
+      "applyNow": "Saba kuba umutetsi"
+    }
+  },
+  "common": {
+    "welcome": "Murakaza neza kuri FoodNet",
+    "tagline": "Ibiryo byacu, isano yacu.",
+    "order_now": "Tumiza Ibiryo",
+    "sign_in": "Injira",
+    "sign_up": "Fungura Konti",
+    "logout": "Sohoka",
+    "loading": "Biratunganywa...",
+    "error": "Havutse ikibazo",
+    "success": "Byagenze neza",
+    "save": "Bika",
+    "cancel": "Ihagarike",
+    "back": "Subira inyuma",
+    "secureAuth": "Umutekano wuzuye",
+    "rwandaGateway": "Irembo ry'u Rwanda"
+  },
+  "auth": {
+    "login": {
+      "title": "Twongeye kuguha ikaze",
+      "subtitle": "Injira muri konti yawe ya FoodNet",
+      "emailLabel": "Imeyili cyangwa Izina ry'ukoresha",
+      "passwordLabel": "Ijambo ry'ibanga",
+      "forgotPassword": "Wibagiwe ijambo ry'ibanga?",
+      "signIn": "Injira",
+      "orContinueWith": "Cyangwa ukomeze ukoresheje",
+      "google": "Google",
+      "newToFoodNet": "Uri mushya kuri FoodNet?",
+      "createAccount": "Fungura konti",
+      "welcomeBackToast": "Twongeye kuguha ikaze!",
+      "loginFailed": "Kwinjira ntibyagenze neza.",
+      "firstTimeAdmin": "Uri Admin mushya?",
+      "noAdminSet": "Nta muntu ushinzwe imiyoborere washyizweho. Fungura konti ya admin ubu.",
+      "setupAdmin": "Fungura konti ya Admin"
+    },
+    "signup": {
+      "title": "Tangira urugendo rwawe",
+      "subtitle": "Fungura konti utangire gutumiza",
+      "fullNameLabel": "Amazina yose",
+      "roleLabel": "Ndifuza kuba...",
+      "customer": "Umuguzi / Ukunda ibiryo",
+      "chef": "Umutetsi / Resititora",
+      "createAccount": "Fungura konti",
+      "alreadyHaveAccount": "Usanzwe ufite konti?",
+      "login": "Injira"
+    }
+  },
+  "footer": {
+    "description": "Urubuga rwa mbere rwa Kirehe ruhuza abakunda ibiryo n'abate_tsi b'inzobere hamwe n'amafunguro meza y'u Rwanda.",
+    "navigation": "Gushakisha",
+    "legal": "Amategeko",
+    "kireheOffice": "Ibiro bya Kirehe",
+    "privacy": "Ibijyanye n'ibanga",
+    "terms": "Amategeko n'amabwiriza",
+    "cookies": "Amabwiriza kuri cookies",
+    "madeIn": "Byakorewe i Kigali",
+    "digitalPlatform": "Urubuga rwa Digital",
+    "address": "Umuhanda munini, Akarere ka Kirehe, u Rwanda"
+  }
+}

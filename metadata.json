@@ -1,0 +1,11 @@
+{
+  "name": "FoodNet",
+  "description": "Kirehe's premier food platform by Joshua Uwizeyimana. Experience high-quality Rwandan cuisine, live interactive chef sessions, and local delivery.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

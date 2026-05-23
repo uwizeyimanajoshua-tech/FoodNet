@@ -1,0 +1,181 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "User account information",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "role": { "type": "string", "enum": ["user", "admin"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email"]
+    },
+    "FoodItem": {
+      "title": "Food Item",
+      "description": "A food item available for order",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "price": { "type": "number" },
+        "category": { "type": "string" },
+        "image": { "type": "string" },
+        "rating": { "type": "number" },
+        "estimatedTime": { "type": "string" },
+        "popular": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "price", "category"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "A customer order",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "items": { "type": "array" },
+        "total": { "type": "number" },
+        "status": { "type": "string", "enum": ["pending", "confirmed", "delivering", "delivered", "cancelled"] },
+        "deliveryLat": { "type": "number" },
+        "deliveryLng": { "type": "number" },
+        "driverName": { "type": "string" },
+        "driverPhone": { "type": "string" },
+        "estimatedArrival": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "items", "total", "status"]
+    },
+    "Restaurant": {
+      "title": "Restaurant",
+      "description": "Partner restaurant",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "image": { "type": "string" },
+        "address": { "type": "string" },
+        "rating": { "type": "number" }
+      },
+      "required": ["name"]
+    },
+    "Livestream": {
+      "title": "Livestream",
+      "description": "Chef live session",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "chefId": { "type": "string" },
+        "chefName": { "type": "string" },
+        "status": { "type": "string", "enum": ["live", "scheduled", "ended"] },
+        "viewers": { "type": "number" },
+        "thumbnail": { "type": "string" }
+      },
+      "required": ["title", "chefId", "status"]
+    },
+    "Comment": {
+        "title": "Comment",
+        "description": "Comment on livestream or food",
+        "properties": {
+            "userId": { "type": "string" },
+            "userName": { "type": "string" },
+            "targetId": { "type": "string" },
+            "text": { "type": "string" },
+            "createdAt": { "type": "string", "format": "date-time" }
+        }
+    },
+    "Payment": {
+      "title": "Payment",
+      "description": "Mobile Money Payment entry",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "amount": { "type": "number" },
+        "phoneNumber": { "type": "string" },
+        "provider": { "type": "string", "enum": ["MTN", "Airtel"] },
+        "transactionId": { "type": "string" },
+        "status": { "type": "string", "enum": ["PENDING_APPROVAL", "SUCCESSFUL", "FAILED"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "amount", "phoneNumber", "provider", "status"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "Detailed financial transaction record",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "paymentId": { "type": "string" },
+        "amount": { "type": "number" },
+        "currency": { "type": "string" },
+        "phoneNumber": { "type": "string" },
+        "provider": { "type": "string" },
+        "status": { "type": "string" },
+        "tx_ref": { "type": "string" },
+        "flw_ref": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "amount", "status"]
+    },
+    "PaymentHistory": {
+      "title": "Payment History",
+      "description": "Historical audit of mobile money transactions",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "amount": { "type": "number" },
+        "phoneNumber": { "type": "string" },
+        "provider": { "type": "string" },
+        "transactionId": { "type": "string" },
+        "status": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "amount", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/foods/{foodId}": {
+      "schema": "FoodItem",
+      "description": "Catalog of food items"
+    },
+    "/orders/{orderId}": {
+      "schema": "Order",
+      "description": "Customer orders"
+    },
+    "/restaurants/{restaurantId}": {
+      "schema": "Restaurant",
+      "description": "Partner restaurants"
+    },
+    "/livestreams/{streamId}": {
+      "schema": "Livestream",
+      "description": "Chef livestreams"
+    },
+    "/comments/{commentId}": {
+      "schema": "Comment",
+      "description": "Livestream comments"
+    },
+    "/favorites/{favoriteId}": {
+      "description": "User favorite items"
+    },
+    "/payments/{paymentId}": {
+      "schema": "Payment",
+      "description": "Track initiated mobile money payments"
+    },
+    "/transactions/{transactionId}": {
+      "schema": "Transaction",
+      "description": "Detailed transaction logs for accounting"
+    },
+    "/paymentHistory/{historyId}": {
+      "schema": "PaymentHistory",
+      "description": "User visible payment history list"
+    }
+  }
+}

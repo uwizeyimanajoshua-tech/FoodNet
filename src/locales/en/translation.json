@@ -1,0 +1,117 @@
+{
+  "nav": {
+    "home": "Home",
+    "restaurants": "Restaurants",
+    "streams": "Live Streams",
+    "cart": "Cart",
+    "dashboard": "Dashboard",
+    "admin": "Admin",
+    "login": "Login",
+    "signup": "Signup",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "home": {
+    "hero": {
+      "platform": "Official FoodNet Platform",
+      "slides": [
+        {
+          "title": "TASTE THE HEART OF RWANDA",
+          "subtitle": "Experience the finest culinary treasures of Kirehe."
+        },
+        {
+          "title": "FRESH FROM LOCAL FARMS",
+          "subtitle": "Supporting our local farmers, one plate at a time."
+        },
+        {
+          "title": "CHEF-LED MASTERCLASSES",
+          "subtitle": "Learn to cook like a pro with our interactive live streams."
+        }
+      ],
+      "startOrdering": "Start Ordering",
+      "liveCooking": "Live Cooking"
+    },
+    "popular": {
+      "tag": "Gourmet Selection",
+      "title": "Popular Dishes in",
+      "subtitle": "Discover the tastes that are trending right now.",
+      "orderNow": "Order Food Now",
+      "topChoice": "Top Choice"
+    },
+    "restaurants": {
+      "tag": "Local Gems",
+      "title": "Kirehe's Best Dining Experience",
+      "description": "We partner with the most authentic and high-quality restaurants in Rwanda. From luxury fine dining to the best grilled nyama choma in Kirehe.",
+      "partnerRestaurants": "Partner Restaurants",
+      "partnerRestaurantsDesc": "Access to 50+ premium restaurants",
+      "exclusiveDeals": "Exclusive Deals",
+      "exclusiveDealsDesc": "Save more with FoodNet special offers"
+    },
+    "cta": {
+      "watchStreams": "Watch Live Streams",
+      "watchStreamsDesc": "Connect with master chefs in real-time. Learn the secrets of Rwandan cuisine.",
+      "watchNow": "Watch Live Now",
+      "becomeChef": "Become a Chef",
+      "becomeChefDesc": "Share your passion for food. Showcase your skills and start earning on FoodNet.",
+      "applyNow": "Apply to be a Chef"
+    }
+  },
+  "common": {
+    "welcome": "Welcome to FoodNet",
+    "tagline": "Rwandan flavors, worldwide connections.",
+    "order_now": "Order Now",
+    "sign_in": "Sign In",
+    "sign_up": "Sign Up",
+    "logout": "Log Out",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success",
+    "save": "Save",
+    "cancel": "Cancel",
+    "back": "Back",
+    "secureAuth": "Secure Auth",
+    "rwandaGateway": "Rwanda Gateway"
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome Back",
+      "subtitle": "Log in to your FoodNet account",
+      "emailLabel": "Email or Username",
+      "passwordLabel": "Password",
+      "forgotPassword": "Forgot?",
+      "signIn": "Sign In",
+      "orContinueWith": "Or Continue With",
+      "google": "Google",
+      "newToFoodNet": "New to FoodNet?",
+      "createAccount": "Create Account",
+      "welcomeBackToast": "Welcome back!",
+      "loginFailed": "Login failed.",
+      "firstTimeAdmin": "First Time Admin?",
+      "noAdminSet": "No administrator has been set up yet. Create your admin account now.",
+      "setupAdmin": "Setup Admin Account"
+    },
+    "signup": {
+      "title": "Start Your Journey",
+      "subtitle": "Create an account to start ordering",
+      "fullNameLabel": "Full Name",
+      "roleLabel": "I want to be a...",
+      "customer": "Customer / Foodie",
+      "chef": "Chef / Restaurant",
+      "createAccount": "Create Account",
+      "alreadyHaveAccount": "Already have an account?",
+      "login": "Login"
+    }
+  },
+  "footer": {
+    "description": "Kirehe's premier food platform connecting local food enthusiasts with master chefs and high-quality Rwandan cuisine.",
+    "navigation": "Navigation",
+    "legal": "Legal",
+    "kireheOffice": "Kirehe Office",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "cookies": "Cookie Policy",
+    "madeIn": "Made in Kigali",
+    "digitalPlatform": "Digital Platform",
+    "address": "Main Street, Kirehe District, Rwanda"
+  }
+}

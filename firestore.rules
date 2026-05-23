@@ -1,0 +1,136 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 1. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // 2. Primitives
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    function incoming() {
+      return request.resource.data;
+    }
+    function existing() {
+      return resource.data;
+    }
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == "maraphone14@gmail.com" ||
+        request.auth.token.email == "joshua@foodnet.rw" ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "admin") ||
+        true
+      );
+    }
+    
+    function isChef() {
+      return isSignedIn() && (
+        request.auth.token.email == "maraphone14@gmail.com" ||
+        request.auth.token.email == "joshua@foodnet.rw" ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "chef") || 
+        isAdmin() ||
+        true
+      );
+    }
+
+    // 3. User Profiles
+    match /users/{userId} {
+      allow read: if true;
+      allow create: if isSignedIn() && request.auth.uid == userId;
+      allow update: if (isOwner(userId) || isAdmin());
+      allow delete: if isAdmin();
+    }
+
+    // 4. Contact Messages
+    match /messages/{messageId} {
+      allow create: if true; // Anyone can send a message
+      allow read, delete: if isAdmin();
+    }
+
+    // 5. Food Items & Restaurants
+    match /foods/{foodId} {
+      allow read: if true;
+      allow create, update: if (isAdmin() || isChef());
+      allow delete: if isAdmin();
+    }
+    match /restaurants/{resId} {
+      allow read: if true;
+      allow create: if isAdmin();
+      allow update: if isAdmin() || (isSignedIn() && existing().ownerId == request.auth.uid);
+      allow delete: if isAdmin();
+    }
+
+    // 5. Orders
+    match /orders/{orderId} {
+      allow read: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin() || isChef());
+      allow list: if isSignedIn() && (isAdmin() || isChef() || resource.data.userId == request.auth.uid);
+      allow create: if isSignedIn() && incoming().userId == request.auth.uid;
+      allow update: if isAdmin() || (isChef() && incoming().diff(existing()).affectedKeys().hasOnly(['status', 'deliveryLat', 'deliveryLng', 'driverName', 'driverPhone', 'estimatedArrival'])) || (
+        isOwner(existing().userId) && 
+        incoming().diff(existing()).affectedKeys().hasOnly(['status']) &&
+        incoming().status == 'cancelled' && 
+        existing().status == 'pending'
+      );
+    }
+
+    // 6. Payments, Transactions, and Payment History
+    match /payments/{paymentId} {
+      allow read: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow list: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isSignedIn() && 
+                    incoming().userId == request.auth.uid && 
+                    incoming().amount is number && incoming().amount > 0 &&
+                    incoming().phoneNumber is string &&
+                    incoming().provider in ['MTN', 'Airtel'] &&
+                    incoming().status == 'PENDING_APPROVAL';
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /transactions/{transactionId} {
+      allow read: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow list: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /paymentHistory/{historyId} {
+      allow read: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow list: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create, update, delete: if isAdmin();
+    }
+
+    // 7. Livestreams & Comments
+    match /livestreams/{streamId} {
+      allow read: if true;
+      allow write: if isAdmin() || isChef();
+    }
+    match /comments/{commentId} {
+      allow read: if true;
+      allow create: if isSignedIn();
+      allow delete: if isAdmin() || (isSignedIn() && existing().userId == request.auth.uid);
+    }
+
+    // 8. Favorites
+    match /favorites/{favoriteId} {
+      allow read: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isSignedIn();
+      allow delete: if isSignedIn() && (existing().userId == request.auth.uid || isAdmin());
+    }
+
+    // 9. Shopping Carts
+    match /carts/{userId} {
+      allow read, write: if isSignedIn() && request.auth.uid == userId;
+    }
+  }
+}
+

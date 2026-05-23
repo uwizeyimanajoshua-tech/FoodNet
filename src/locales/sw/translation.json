@@ -1,0 +1,117 @@
+{
+  "nav": {
+    "home": "Nyumbani",
+    "restaurants": "Migahawa",
+    "streams": "Live Mubashara",
+    "cart": "Kizibo",
+    "dashboard": "Dashibodi",
+    "admin": "Usimamizi",
+    "login": "Ingia",
+    "signup": "Jisajili",
+    "about": "Tuhusu Sisi",
+    "contact": "Wasiliana Nasi"
+  },
+  "home": {
+    "hero": {
+      "platform": "Jukwaa Rasmi la FoodNet",
+      "slides": [
+        {
+          "title": "AMSHA LADHA YA RWANDA",
+          "subtitle": "Jionee hazina bora na za kipekee za upishi za Kirehe."
+        },
+        {
+          "title": "BORA KUTOKA MASHAMBA YETU",
+          "subtitle": "Kusaidia wakulima wetu wa kienyeji, sahani moja baada ya nyingine."
+        },
+        {
+          "title": "MADARASA YA UPISHI KITAALAMU",
+          "subtitle": "Jifunze kupika kama mtaalamu kupitia vipindi vyetu vya mubashara."
+        }
+      ],
+      "startOrdering": "Agiza Sasa",
+      "liveCooking": "Kupika Mubashara"
+    },
+    "popular": {
+      "tag": "Uteuzi wa Gourmet",
+      "title": "Vyakula Maarufu katika",
+      "subtitle": "Gundua ladha zinazovuma sasa hivi.",
+      "orderNow": "Agiza Chakula Sasa",
+      "topChoice": "Chaguo Bora"
+    },
+    "restaurants": {
+      "tag": "Lulu za Nyumbani",
+      "title": "Uzoefu Bora wa Kula Wilayani Kirehe",
+      "description": "Tunashirikiana na migahawa halisi na yenye viwango vya juu nchini Rwanda. Kuanzia vyakula vya kisasa hadi nyama choma bora zaidi.",
+      "partnerRestaurants": "Migahawa Washirika",
+      "partnerRestaurantsDesc": "Pata ufikiaji wa migahawa zaidi ya 50 bora",
+      "exclusiveDeals": "Ofa za Kipekee",
+      "exclusiveDealsDesc": "Okoa zaidi ukitumia ofa maalum za FoodNet"
+    },
+    "cta": {
+      "watchStreams": "Tazama Mubashara",
+      "watchStreamsDesc": "Wasiliana na wapishi wabobezi kwa wakati halisi. Jifunze siri za vyakula vya Rwanda.",
+      "watchNow": "Tazama Sasa hivi",
+      "becomeChef": "Kuwa Mpishi",
+      "becomeChefDesc": "Shiriki mapenzi yako ya chakula. Onyesha ujuzi wako na uanze kupata kipato kupitia FoodNet.",
+      "applyNow": "Omba kuwa Mpishi"
+    }
+  },
+  "common": {
+    "welcome": "Karibu FoodNet",
+    "tagline": "Ladha za Rwanda, muunganisho wa kimataifa.",
+    "order_now": "Agiza Sasa",
+    "sign_in": "Ingia",
+    "sign_up": "Jisajili",
+    "logout": "Ondoka",
+    "loading": "Inapakia...",
+    "error": "Hitilafu imetokea",
+    "success": "Imefanikiwa",
+    "save": "Hifadhi",
+    "cancel": "Ghairi",
+    "back": "Nyuma",
+    "secureAuth": "Uthibitishaji Salama",
+    "rwandaGateway": "Lango la Rwanda"
+  },
+  "auth": {
+    "login": {
+      "title": "Karibu Tena",
+      "subtitle": "Ingia kwenye akaunti yako ya FoodNet",
+      "emailLabel": "Barua Pepe au Jina la Mtumiaji",
+      "passwordLabel": "Nywila",
+      "forgotPassword": "Je, umesahau nywila?",
+      "signIn": "Ingia Sasa",
+      "orContinueWith": "Au Endelea na",
+      "google": "Google",
+      "newToFoodNet": "Je, wewe ni mgeni?",
+      "createAccount": "Fungua Akaunti",
+      "welcomeBackToast": "Karibu tena!",
+      "loginFailed": "Hamna ufikiaji.",
+      "firstTimeAdmin": "Msimamizi Mpya?",
+      "noAdminSet": "Hakuna msimamizi aliyewekwa bado. Fungua akaunti ya usimamizi sasa.",
+      "setupAdmin": "Weka Akaunti ya Usimamizi"
+    },
+    "signup": {
+      "title": "Anza Safari Yako",
+      "subtitle": "Fungua akaunti ili uanze kuagiza",
+      "fullNameLabel": "Jina Kamili",
+      "roleLabel": "Ningependa kuwa...",
+      "customer": "Mteja / Mpenzi wa Chakula",
+      "chef": "Mpishi / Mgahawa",
+      "createAccount": "Fungua Akaunti",
+      "alreadyHaveAccount": "Tayari unayo akaunti?",
+      "login": "Ingia"
+    }
+  },
+  "footer": {
+    "description": "Jukwaa bora la chakula Wilayani Kirehe likiunganisha wapenzi wa chakula, wapishi wabobezi na vyakula bora vya Rwanda.",
+    "navigation": "Urambazaji",
+    "legal": "Kisheria",
+    "kireheOffice": "Ofisi ya Kirehe",
+    "privacy": "Sera ya Faragha",
+    "terms": "Vigezo na Masharti",
+    "cookies": "Sera ya Kuki",
+    "madeIn": "Imetengenezwa kwa Upendo Kigali",
+    "digitalPlatform": "Jukwaa la Kidijitali",
+    "address": "Barabara Kuu, Wilaya ya Kirehe, Rwanda"
+  }
+}
