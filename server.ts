@@ -4,6 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { createServer as createViteServer } from "vite";
 import admin from "firebase-admin";
+import { getFirestore } from "firebase-admin/firestore";
 import fs from "fs";
 import { GoogleGenAI } from "@google/genai";
 
@@ -59,7 +60,6 @@ async function startServer() {
       }
     }
     
-    const { getFirestore } = require("firebase-admin/firestore");
     const appInstance = admin.apps.length > 0 ? admin.app() : undefined;
     if (databaseId) {
       return getFirestore(appInstance, databaseId);

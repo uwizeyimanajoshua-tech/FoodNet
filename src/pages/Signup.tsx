@@ -45,7 +45,7 @@ export default function Signup() {
         return;
       }
       setError(err.message || "Google sign-in failed. Please try again.");
-      toast.error("Google signup failed.");
+      toast.error(err.message || "Google sign-in failed. Please try again.");
       console.error(err);
     } finally {
       setIsLoading(false);

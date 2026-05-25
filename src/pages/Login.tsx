@@ -62,7 +62,7 @@ export default function Login() {
         return;
       }
       setError(err.message || "Google sign-in failed. Please try again.");
-      toast.error("Google sign-in failed.");
+      toast.error(err.message || "Google sign-in failed. Please try again.");
       console.error(err);
     } finally {
       setIsLoading(false);

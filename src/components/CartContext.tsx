@@ -70,10 +70,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
             setCartItems(merged);
             localStorage.setItem("foodnet_cart", JSON.stringify(merged));
-            await setDoc(cartRef, { items: merged, updatedAt: new Date() });
+            await setDoc(cartRef, { items: JSON.parse(JSON.stringify(merged)), updatedAt: new Date() });
           } else if (cartItems.length > 0) {
             // No cart in db yet but guest had items, save them immediately
-            await setDoc(cartRef, { items: cartItems, updatedAt: new Date() });
+            await setDoc(cartRef, { items: JSON.parse(JSON.stringify(cartItems)), updatedAt: new Date() });
           }
         } catch (err) {
           console.error("Failed to sync cart from Firestore:", err);
@@ -101,7 +101,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       if (user) {
         const cartRef = doc(db, "carts", user.uid);
         try {
-          await setDoc(cartRef, { items: cartItems, updatedAt: new Date() });
+          await setDoc(cartRef, { items: JSON.parse(JSON.stringify(cartItems)), updatedAt: new Date() });
         } catch (err) {
           console.error("Failed to save cart state to Firestore:", err);
         }

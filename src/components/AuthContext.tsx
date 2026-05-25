@@ -87,6 +87,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else if (err.code === "auth/operation-not-allowed") {
         console.error("Firebase Configuration Issue: Google Sign-in is not enabled.");
         throw new Error("System Configuration Error: Google Authentication is currently disabled. Please enable it here: https://console.firebase.google.com/project/" + firebaseConfig.projectId + "/authentication/providers (Authentication > Sign-in method > Google > Enable)");
+      } else if (err.code === "auth/unauthorized-domain") {
+        const hostname = window.location.hostname;
+        console.error(`Firebase Configuration Issue: Domain ${hostname} is not authorized.`);
+        throw new Error(`Domain Authorization Error: "${hostname}" is not authorized in your Firebase console. Please go to https://console.firebase.google.com/project/${firebaseConfig.projectId}/authentication/settings and add "${hostname}" to your "Authorized domains" list.`);
       }
       throw err;
     }
@@ -159,6 +163,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         throw new Error("An account with this email already exists.");
       } else if (err.code === "auth/weak-password") {
         throw new Error("Password is too weak. Please use at least 6 characters.");
+      } else if (err.code === "auth/operation-not-allowed") {
+        console.error("Firebase Configuration Issue: Email/Password Authentication is not enabled.");
+        throw new Error("System Configuration Error: The 'Email/Password' authentication method is currently disabled. Please enable it here: https://console.firebase.google.com/project/" + firebaseConfig.projectId + "/authentication/providers (Authentication > Sign-in method > Email/Password > Enable) to allow account creations.");
       }
       throw err;
     }
