@@ -644,277 +644,180 @@ export function Streams() {
               </div>
             </div>
           </div>
-
-          {/* Chat & Dynamic Analytics Charts Column */}
+          {/* Dynamic Analytics Charts Column */}
           <div className="lg:w-1/3 flex flex-col justify-between">
-            <div className="bg-white rounded-[2.5rem] shadow-xl shadow-gray-100/40 h-[720px] flex flex-col overflow-hidden border border-gray-100 sticky top-28">
+            <div className="bg-slate-950 rounded-[2.5rem] shadow-xl shadow-gray-900/40 h-[720px] flex flex-col overflow-hidden border border-white/10 sticky top-28">
               
-              {/* Professional Tabs Header: Chat vs Dynamic Statistics Chart */}
-              <div className="p-2 bg-gray-100/60 shrink-0 border-b border-gray-100 flex gap-1">
-                <button
-                  onClick={() => setActiveTab("chat")}
-                  className={`flex-1 py-3 px-4 rounded-2xl font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
-                    activeTab === "chat"
-                      ? "bg-white text-gray-900 shadow-sm"
-                      : "text-gray-400 hover:text-gray-600 hover:bg-white/40"
-                  }`}
-                >
-                  <MessageSquare size={14} />
-                  <span>Interactive Chat</span>
-                </button>
-                <button
-                  onClick={() => setActiveTab("charts")}
-                  className={`flex-1 py-3 px-4 rounded-2xl font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
-                    activeTab === "charts"
-                      ? "bg-white text-orange-600 shadow-sm"
-                      : "text-gray-400 hover:text-gray-600 hover:bg-white/40"
-                  }`}
-                >
-                  <Activity size={14} className="animate-pulse" />
-                  <span>Engagement Chart</span>
-                </button>
+              {/* Telemetry Header */}
+              <div className="p-6 border-b border-white/10 flex items-center gap-3 bg-slate-900 shrink-0">
+                <Activity size={18} className="text-orange-500 animate-pulse" />
+                <div>
+                  <h3 className="font-extrabold text-white text-sm leading-tight uppercase tracking-wider">Live Stream Analytics</h3>
+                  <p className="text-[10px] text-gray-400 font-bold">Real-time broadcast metrics &amp; audience interest</p>
+                </div>
               </div>
 
-              {/* TAB CONTENT: Chat Feed */}
-              {activeTab === "chat" ? (
-                <>
-                  {/* Message scroll container */}
-                  <div className="flex-grow overflow-y-auto p-6 space-y-4 bg-gray-50/25">
-                    <div className="text-center py-2 mb-2">
-                      <span className="text-[10px] font-bold text-gray-400 bg-gray-100 rounded-lg px-3 py-1.5">
-                        📢 Live Feed Active: Respect and culinary passion
-                      </span>
-                    </div>
-
-                    <AnimatePresence initial={false}>
-                      {messages.map((chat, idx) => (
-                        <motion.div 
-                          key={idx}
-                          initial={{ opacity: 0, y: 15 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className="flex gap-2.5 text-xs"
-                        >
-                          <img 
-                            src={chat.avatar} 
-                            className="w-9 h-9 rounded-2xl object-cover border border-gray-100 shrink-0 shadow-sm" 
-                            alt="Profile avatar" 
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).src = `https://i.pravatar.cc/100?u=${idx}`;
-                            }}
-                          />
-                          <div className="flex-grow min-w-0">
-                            <div className={`p-4 rounded-2xl ${
-                              chat.isChef 
-                                ? 'bg-orange-50 border border-orange-200/50 shadow-sm' 
-                                : 'bg-white border border-gray-100/70 shadow-sm'
-                            }`}>
-                              <div className="flex items-center gap-1.5 mb-1">
-                                <span className={`font-black tracking-tight shrink-0 truncate max-w-[120px] ${
-                                  chat.isChef ? 'text-orange-600' : 'text-gray-900'
-                                }`}>
-                                  {chat.user}
-                                </span>
-                                {chat.isChef && (
-                                  <span className="bg-orange-600 text-white text-[8px] font-black uppercase px-1.5 py-0.5 rounded tracking-wider">
-                                    Host • Chef
-                                  </span>
-                                )}
-                              </div>
-                              <p className={`text-xs leading-relaxed font-semibold break-words ${
-                                chat.isChef ? 'text-orange-900 font-bold' : 'text-gray-600'
-                              }`}>
-                                {chat.msg}
-                              </p>
-                            </div>
-                          </div>
-                        </motion.div>
-                      ))}
-                    </AnimatePresence>
-                    <div ref={chatEndRef} />
+              {/* TAB CONTENT: Analytical Engagement & Community Chart */}
+              <div className="flex-grow overflow-y-auto p-6 space-y-6 text-white flex flex-col justify-between">
+                
+                {/* Header Metrics */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <BarChart3 className="text-orange-500 animate-pulse" size={18} />
+                    <h4 className="text-xs uppercase font-black text-gray-400 tracking-widest">Real-time engagement telemetry</h4>
                   </div>
 
-                  {/* Chat Send Input Box */}
-                  <div className="p-4 bg-white border-t border-gray-100 shrink-0">
-                    <form onSubmit={handleSendMessage} className="flex gap-2 bg-gray-100 p-1.5 rounded-2xl border border-gray-100/50">
-                      <input 
-                        type="text" 
-                        value={chatInput}
-                        onChange={(e) => setChatInput(e.target.value)}
-                        placeholder="Say hello or ask recipe questions..." 
-                        className="flex-grow bg-transparent px-3 py-2 outline-none font-bold text-xs text-gray-800 placeholder:text-gray-400"
-                      />
-                      <button 
-                        type="submit"
-                        className="bg-orange-600 text-white p-2.5 rounded-xl hover:bg-orange-700 transition-all shadow-md shadow-orange-600/10 active:scale-95 shrink-0"
-                      >
-                        <Send size={16} />
-                      </button>
-                    </form>
-                  </div>
-                </>
-              ) : (
-                /* TAB CONTENT: Analytical Engagement & Community Chart */
-                <div className="flex-grow overflow-y-auto p-6 space-y-6 bg-slate-950 text-white flex flex-col justify-between">
-                  
-                  {/* Header Metrics */}
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-2">
-                      <BarChart3 className="text-orange-500 animate-pulse" size={18} />
-                      <h4 className="text-xs uppercase font-black text-gray-400 tracking-widest">Real-time engagement telemetry</h4>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="bg-white/5 border border-white/10 p-4 rounded-2xl flex flex-col justify-between">
-                        <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Engagement Intensity</span>
-                        <div className="flex items-baseline gap-1.5 mt-2">
-                          <span className="text-2xl font-black text-orange-400">{engagementScore}%</span>
-                          <TrendingUp className="text-green-500" size={14} />
-                        </div>
-                        <span className="text-[9px] font-semibold text-gray-500 mt-1">Excellent Score</span>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="bg-white/5 border border-white/10 p-4 rounded-2xl flex flex-col justify-between">
+                      <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Engagement Intensity</span>
+                      <div className="flex items-baseline gap-1.5 mt-2">
+                        <span className="text-2xl font-black text-orange-400">{engagementScore}%</span>
+                        <TrendingUp className="text-green-500" size={14} />
                       </div>
+                      <span className="text-[9px] font-semibold text-gray-500 mt-1">Excellent Score</span>
+                    </div>
 
-                      <div className="bg-white/5 border border-white/10 p-4 rounded-2xl flex flex-col justify-between">
-                        <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Chat Velocity</span>
-                        <div className="flex items-baseline gap-1.5 mt-2">
-                          <span className="text-2xl font-black text-white">{messagesPerMinute}</span>
-                          <span className="text-[10px] text-gray-400 font-extrabold">msg/min</span>
-                        </div>
-                        <span className="text-[9px] font-semibold text-orange-500 mt-1">High Velocity</span>
+                    <div className="bg-white/5 border border-white/10 p-4 rounded-2xl flex flex-col justify-between">
+                      <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Activity Frequency</span>
+                      <div className="flex items-baseline gap-1.5 mt-2">
+                        <span className="text-2xl font-black text-white">{messagesPerMinute}</span>
+                        <span className="text-[10px] text-gray-400 font-extrabold">pts/min</span>
                       </div>
+                      <span className="text-[9px] font-semibold text-orange-500 mt-1">High Velocity</span>
                     </div>
                   </div>
-
-                  {/* SVG Live Graphic Plotting Engagement over Seconds */}
-                  <div className="bg-white/5 border border-white/10 p-5 rounded-3xl space-y-3 relative overflow-hidden">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-black uppercase text-gray-400 tracking-wider">Interactive Excitement timeline</span>
-                      <span className="text-[8px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded font-black tracking-widest uppercase animate-pulse">
-                        LIVE UPDATE
-                      </span>
-                    </div>
-
-                    {/* SVG Chart Frame */}
-                    <div className="relative h-24 flex items-end justify-center pt-2">
-                      <svg className="w-full h-full overflow-visible">
-                        <defs>
-                          <g id="grid-lines">
-                            <line x1="0" y1="20" x2="300" y2="20" stroke="rgba(255,255,255,0.04)" strokeDasharray="2 2" />
-                            <line x1="0" y1="50" x2="300" y2="50" stroke="rgba(255,255,255,0.04)" strokeDasharray="2 2" />
-                            <line x1="0" y1="80" x2="300" y2="80" stroke="rgba(255,255,255,0.04)" strokeDasharray="2 2" />
-                          </g>
-                          <linearGradient id="chart-grad" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="#f97316" stopOpacity="0.45" />
-                            <stop offset="100%" stopColor="#f97316" stopOpacity="0.0" />
-                          </linearGradient>
-                        </defs>
-                        
-                        {/* Render Grid */}
-                        <use href="#grid-lines" />
-
-                        {/* Stroke Path */}
-                        <path 
-                          d={getLinePath()} 
-                          fill="none" 
-                          stroke="#f97316" 
-                          strokeWidth="3.5" 
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="transition-all duration-700 ease-in-out" 
-                        />
-                        
-                        {/* Underlay Gradient */}
-                        <path 
-                          d={`${getLinePath()} L 270 80 L 10 80 Z`} 
-                          fill="url(#chart-grad)"
-                          className="transition-all duration-700 ease-in-out" 
-                        />
-
-                        {/* Pulsating last plot point shadow */}
-                        {chartData.length > 0 && (
-                          <circle 
-                            cx={10 + ((chartData.length - 1) / (chartData.length - 1)) * 260} 
-                            cy={80 - 10 - ((chartData[chartData.length - 1] - 50) / 50) * 60} 
-                            r="5" 
-                            fill="#f97316" 
-                            className="animate-ping" 
-                          />
-                        )}
-                      </svg>
-                    </div>
-
-                    <div className="flex justify-between text-[8px] text-gray-500 font-extrabold">
-                      <span>30s ago</span>
-                      <span>15s ago</span>
-                      <span>Now</span>
-                    </div>
-                  </div>
-
-                  {/* Crowd Sentiment and Reaction percentages */}
-                  <div className="space-y-4">
-                    <span className="text-[10px] font-black uppercase text-gray-400 tracking-wider block">Audience Sentiment Analysis</span>
-                    <div className="space-y-2.5">
-                      <div>
-                        <div className="flex justify-between text-xs font-bold mb-1">
-                          <span className="flex items-center gap-1.5"><Smile size={12} className="text-yellow-400" /> Inspired &amp; Hungry</span>
-                          <span>{sentimentHappy}%</span>
-                        </div>
-                        <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                          <motion.div 
-                            className="bg-orange-500 h-full rounded-full" 
-                            animate={{ width: `${sentimentHappy}%` }} 
-                            transition={{ duration: 0.8 }}
-                          />
-                        </div>
-                      </div>
-
-                      <div>
-                        <div className="flex justify-between text-xs font-bold mb-1">
-                          <span className="flex items-center gap-1.5"><Flame size={12} className="text-red-500" /> Interactive Love</span>
-                          <span>{100 - sentimentHappy}%</span>
-                        </div>
-                        <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                          <motion.div 
-                            className="bg-red-500 h-full rounded-full" 
-                            animate={{ width: `${100 - sentimentHappy}%` }} 
-                            transition={{ duration: 0.8 }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Leaderboard panel representation to feel real */}
-                  <div className="bg-white/5 p-4 rounded-2xl space-y-3.5 border border-white/5">
-                    <div className="flex items-center gap-2">
-                      <Award className="text-yellow-500" size={14} />
-                      <span className="text-[10px] font-black uppercase text-gray-300 tracking-wider">Top Stream Chat Supporters</span>
-                    </div>
-                    <div className="space-y-2">
-                      {[
-                        { name: "Sarah J.", commentsCount: "12 remarks", rating: "VIP Patron" },
-                        { name: "Kirehe_Foodie", commentsCount: "8 remarks", rating: "Culinary Fanatic" },
-                        { name: "Mike Chef", commentsCount: "6 remarks", rating: "Baking Resident" }
-                      ].map((lead, i) => (
-                        <div key={i} className="flex justify-between items-center text-xs">
-                          <div className="flex items-center gap-2">
-                            <span className="font-bold text-gray-500">{i + 1}.</span>
-                            <span className="font-extrabold text-gray-200">{lead.name}</span>
-                          </div>
-                          <div className="text-right">
-                            <p className="text-[10px] text-orange-400 font-bold">{lead.rating}</p>
-                            <p className="text-[8px] text-gray-400 font-extrabold">{lead.commentsCount}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <p className="text-[9px] text-gray-500 text-center font-bold">
-                    Telemetry calculates chat speed, floating reactions, and viewer activity metrics natively.
-                  </p>
-
                 </div>
-              )}
+
+                {/* SVG Live Graphic Plotting Engagement over Seconds */}
+                <div className="bg-white/5 border border-white/10 p-5 rounded-3xl space-y-3 relative overflow-hidden">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-black uppercase text-gray-400 tracking-wider">Interactive Excitement timeline</span>
+                    <span className="text-[8px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded font-black tracking-widest uppercase animate-pulse">
+                      LIVE UPDATE
+                    </span>
+                  </div>
+
+                  {/* SVG Chart Frame */}
+                  <div className="relative h-24 flex items-end justify-center pt-2">
+                    <svg className="w-full h-full overflow-visible">
+                      <defs>
+                        <g id="grid-lines">
+                          <line x1="0" y1="20" x2="300" y2="20" stroke="rgba(255,255,255,0.04)" strokeDasharray="2 2" />
+                          <line x1="0" y1="50" x2="300" y2="50" stroke="rgba(255,255,255,0.04)" strokeDasharray="2 2" />
+                          <line x1="0" y1="80" x2="300" y2="80" stroke="rgba(255,255,255,0.04)" strokeDasharray="2 2" />
+                        </g>
+                        <linearGradient id="chart-grad" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#f97316" stopOpacity="0.45" />
+                          <stop offset="100%" stopColor="#f97316" stopOpacity="0.0" />
+                        </linearGradient>
+                      </defs>
+                      
+                      {/* Render Grid */}
+                      <use href="#grid-lines" />
+
+                      {/* Stroke Path */}
+                      <path 
+                        d={getLinePath()} 
+                        fill="none" 
+                        stroke="#f97316" 
+                        strokeWidth="3.5" 
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="transition-all duration-700 ease-in-out" 
+                      />
+                      
+                      {/* Underlay Gradient */}
+                      <path 
+                        d={`${getLinePath()} L 270 80 L 10 80 Z`} 
+                        fill="url(#chart-grad)"
+                        className="transition-all duration-700 ease-in-out" 
+                      />
+
+                      {/* Pulsating last plot point shadow */}
+                      {chartData.length > 0 && (
+                        <circle 
+                          cx={10 + ((chartData.length - 1) / (chartData.length - 1)) * 260} 
+                          cy={80 - 10 - ((chartData[chartData.length - 1] - 50) / 50) * 60} 
+                          r="5" 
+                          fill="#f97316" 
+                          className="animate-ping" 
+                        />
+                      )}
+                    </svg>
+                  </div>
+
+                  <div className="flex justify-between text-[8px] text-gray-500 font-extrabold">
+                    <span>30s ago</span>
+                    <span>15s ago</span>
+                    <span>Now</span>
+                  </div>
+                </div>
+
+                {/* Crowd Sentiment and Reaction percentages */}
+                <div className="space-y-4">
+                  <span className="text-[10px] font-black uppercase text-gray-400 tracking-wider block">Audience Sentiment Analysis</span>
+                  <div className="space-y-2.5">
+                    <div>
+                      <div className="flex justify-between text-xs font-bold mb-1">
+                        <span className="flex items-center gap-1.5"><Smile size={12} className="text-yellow-400" /> Inspired &amp; Hungry</span>
+                        <span>{sentimentHappy}%</span>
+                      </div>
+                      <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+                        <motion.div 
+                          className="bg-orange-500 h-full rounded-full" 
+                          animate={{ width: `${sentimentHappy}%` }} 
+                          transition={{ duration: 0.8 }}
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="flex justify-between text-xs font-bold mb-1">
+                        <span className="flex items-center gap-1.5"><Flame size={12} className="text-red-500" /> Interactive Love</span>
+                        <span>{100 - sentimentHappy}%</span>
+                      </div>
+                      <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+                        <motion.div 
+                          className="bg-red-500 h-full rounded-full" 
+                          animate={{ width: `${100 - sentimentHappy}%` }} 
+                          transition={{ duration: 0.8 }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Leaderboard panel representation to feel real */}
+                <div className="bg-white/5 p-4 rounded-2xl space-y-3.5 border border-white/5">
+                  <div className="flex items-center gap-2">
+                    <Award className="text-yellow-500" size={14} />
+                    <span className="text-[10px] font-black uppercase text-gray-300 tracking-wider">Top Stream Supporters</span>
+                  </div>
+                  <div className="space-y-2">
+                    {[
+                      { name: "Sarah J.", commentsCount: "12 interactions", rating: "VIP Patron" },
+                      { name: "Kirehe_Foodie", commentsCount: "8 interactions", rating: "Culinary Fanatic" },
+                      { name: "Mike Chef", commentsCount: "6 interactions", rating: "Baking Resident" }
+                    ].map((lead, i) => (
+                      <div key={i} className="flex justify-between items-center text-xs">
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-gray-500">{i + 1}.</span>
+                          <span className="font-extrabold text-gray-200">{lead.name}</span>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-[10px] text-orange-400 font-bold">{lead.rating}</p>
+                          <p className="text-[8px] text-gray-400 font-extrabold">{lead.commentsCount}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <p className="text-[9px] text-gray-500 text-center font-bold">
+                  Telemetry calculates active speeds, floating reactions, and viewer activity metrics natively.
+                </p>
+
+              </div>
 
             </div>
             
