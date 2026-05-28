@@ -90,8 +90,8 @@ const AdminDashboard = () => {
     isVegetarian: false,
     isPopular: true,
     chef: {
-        name: "Chef Joshua",
-        avatar: "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=120&h=120&fit=crop",
+        name: "Master Chef N. Karisa (NK)",
+        avatar: "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&q=80&w=200",
         quote: "Traditional Rwandan foods are a gateway to our culinary soul."
       }
   });
@@ -107,6 +107,28 @@ const AdminDashboard = () => {
       reader.onloadend = () => {
         setFoodForm(prev => ({ ...prev, image: reader.result as string }));
         toast.success("Image loaded successfully!");
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleChefAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        toast.error("Avatar is too large. Choose an image under 2MB.");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFoodForm(prev => ({ 
+          ...prev, 
+          chef: {
+            ...(prev.chef || { name: "Master Chef N. Karisa (NK)", quote: "Traditional Rwandan culinary art." }),
+            avatar: reader.result as string
+          }
+        }));
+        toast.success("Chef Profile Image uploaded successfully!");
       };
       reader.readAsDataURL(file);
     }
@@ -264,8 +286,8 @@ const AdminDashboard = () => {
       isVegetarian: food.isVegetarian || false,
       isPopular: food.isPopular !== undefined ? food.isPopular : true,
       chef: food.chef || {
-        name: "Chef Joshua",
-        avatar: "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=120&h=120&fit=crop",
+        name: "Master Chef N. Karisa (NK)",
+        avatar: "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&q=80&w=200",
         quote: "Traditional Rwandan foods are a gateway to our culinary soul."
       }
     });
@@ -286,8 +308,8 @@ const AdminDashboard = () => {
       isVegetarian: false,
       isPopular: true,
       chef: {
-        name: "Chef Joshua",
-        avatar: "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=120&h=120&fit=crop",
+        name: "Master Chef N. Karisa (NK)",
+        avatar: "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&q=80&w=200",
         quote: "Traditional Rwandan foods are a gateway to our culinary soul."
       }
     });
@@ -893,6 +915,112 @@ const AdminDashboard = () => {
                                     )}
                                 </div>
 
+                                {/* Chef / Curator Specification with profile avatar uploading */}
+                                <div className="bg-orange-50/50 p-6 rounded-[2rem] border border-orange-100/50 space-y-4">
+                                    <h4 className="text-sm font-black text-orange-950 uppercase tracking-wider">Chef / Curator Details</h4>
+                                    
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="flex flex-col gap-1.5">
+                                            <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider">Chef Name</label>
+                                            <input 
+                                                type="text"
+                                                value={foodForm.chef?.name || "Master Chef N. Karisa (NK)"}
+                                                onChange={(e) => setFoodForm(prev => ({
+                                                    ...prev,
+                                                    chef: {
+                                                        ...(prev.chef || { avatar: "", quote: "" }),
+                                                        name: e.target.value
+                                                    }
+                                                }))}
+                                                placeholder="e.g. Master Chef N. Karisa"
+                                                className="px-4 py-2 bg-white border border-gray-100 rounded-xl outline-none focus:border-orange-500 font-bold text-xs text-gray-800"
+                                                required
+                                            />
+                                        </div>
+
+                                        <div className="flex flex-col gap-1.5">
+                                            <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider">Chef Quote</label>
+                                            <input 
+                                                type="text"
+                                                value={foodForm.chef?.quote || "Traditional Rwandan culinary art."}
+                                                onChange={(e) => setFoodForm(prev => ({
+                                                    ...prev,
+                                                    chef: {
+                                                        ...(prev.chef || { name: "Master Chef N. Karisa (NK)", avatar: "" }),
+                                                        quote: e.target.value
+                                                    }
+                                                }))}
+                                                placeholder="e.g. Traditional feeds of Kirehe."
+                                                className="px-4 py-2 bg-white border border-gray-100 rounded-xl outline-none focus:border-orange-500 font-bold text-xs text-gray-800"
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-3">
+                                        <div className="flex flex-col gap-1.5">
+                                            <label className="text-[10px] font-black uppercase text-gray-400 tracking-wider">Chef Profile Image / Avatar Link</label>
+                                            <input 
+                                                type="text"
+                                                value={foodForm.chef?.avatar || ""}
+                                                onChange={(e) => setFoodForm(prev => ({
+                                                    ...prev,
+                                                    chef: {
+                                                        ...(prev.chef || { name: "Master Chef N. Karisa (NK)", quote: "" }),
+                                                        avatar: e.target.value
+                                                    }
+                                                }))}
+                                                placeholder="Paste a direct avatar link or choose upload below"
+                                                className="px-4 py-2 bg-white border border-gray-100 rounded-xl outline-none focus:border-orange-500 font-bold text-xs text-gray-800"
+                                            />
+                                        </div>
+
+                                        <div className="flex items-center justify-between gap-4 p-3 border border-orange-100 rounded-2xl bg-white">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-8 h-8 bg-orange-100 text-orange-600 rounded-lg flex items-center justify-center">
+                                                    <Upload size={16} />
+                                                </div>
+                                                <div>
+                                                    <p className="font-extrabold text-[11px] text-gray-800">Upload Chef Image</p>
+                                                    <p className="text-[9px] text-gray-400 font-medium">Under 2MB size</p>
+                                                </div>
+                                            </div>
+                                            <label className="relative cursor-pointer bg-orange-600 hover:bg-orange-700 text-white px-3 py-1.5 rounded-lg font-black text-[10px] uppercase tracking-wider transition-colors shrink-0">
+                                                Upload Cover
+                                                <input 
+                                                    type="file" 
+                                                    accept="image/*"
+                                                    onChange={handleChefAvatarUpload} 
+                                                    className="hidden" 
+                                                />
+                                            </label>
+                                        </div>
+
+                                        {foodForm.chef?.avatar && (
+                                            <div className="flex items-center gap-3 bg-white p-3 border border-gray-100 rounded-2xl max-w-xs">
+                                                <img src={foodForm.chef.avatar} className="w-10 h-10 rounded-xl object-cover" alt="Chef avatar preview" />
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-[10px] font-black text-gray-800 truncate">{foodForm.chef.name || 'Chef'}</p>
+                                                    <p className="text-[9px] text-gray-400 font-medium">Avatar Loaded</p>
+                                                </div>
+                                                <button 
+                                                    type="button"
+                                                    onClick={() => setFoodForm(prev => ({
+                                                        ...prev,
+                                                        chef: {
+                                                            ...(prev.chef || { name: "Chef Joshua", quote: "" }),
+                                                            avatar: ""
+                                                        }
+                                                    }))}
+                                                    className="text-[9px] font-extrabold text-red-600 uppercase hover:underline"
+                                                >
+                                                    Remove
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+
                                 <div className="flex flex-col gap-1.5">
                                     <label className="text-xs font-black uppercase text-gray-400 tracking-wider ml-1">Description</label>
                                     <textarea 
@@ -1149,8 +1277,8 @@ const AdminDashboard = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {[
-                        { id: "1", title: "Rwandan Coffee Masterclass", chef: "Chef Joshua", status: "live", viewers: 120 },
-                        { id: "2", title: "Traditional Isombe Cooking", chef: "Chef Marie", status: "scheduled", viewers: 0 }
+                        { id: "1", title: "Rwandan Coffee Masterclass", chef: "Master Chef N. Karisa (NK)", status: "live", viewers: 120 },
+                        { id: "2", title: "Traditional Isombe Cooking", chef: "Master Chef N. Karisa (NK)", status: "scheduled", viewers: 450 }
                     ].map((s) => (
                         <div key={s.id} className="bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm flex flex-col gap-6">
                             <div className="flex justify-between items-start">

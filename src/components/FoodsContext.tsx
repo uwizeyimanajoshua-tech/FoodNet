@@ -24,21 +24,35 @@ export function FoodsProvider({ children }: { children: React.ReactNode }) {
     setLoading(true);
     try {
       const foodsSnap = await getDocs(collection(db, "foods"));
-      if (foodsSnap.empty) {
-        // Automatically seed with default FOODS_DATA
-        console.log("No foods in Firestore. Seeding database with default Kirehe culinary choices...");
+      const list: FoodItem[] = [];
+      foodsSnap.forEach((docSnap) => {
+        list.push({ id: docSnap.id, ...docSnap.data() } as FoodItem);
+      });
+
+      if (list.length < FOODS_DATA.length) {
+        console.log("Firestore catalog is missing new Rwandan foods. Merging additions...");
         for (const item of FOODS_DATA) {
-          // Use item.id as doc ID to preserve details route linkages
-          await setDoc(doc(db, "foods", item.id), item);
+          const exists = list.some(f => f.id === item.id);
+          if (!exists) {
+            await setDoc(doc(db, "foods", item.id), item);
+            list.push(item);
+          }
         }
-        setFoods(FOODS_DATA);
-      } else {
-        const list: FoodItem[] = [];
-        foodsSnap.forEach((docSnap) => {
-          list.push({ id: docSnap.id, ...docSnap.data() } as FoodItem);
-        });
-        setFoods(list);
       }
+      const mappedList = list.map(item => {
+        if (!item.chef || item.chef.name === "Chef Joshua" || item.chef.name?.includes("Joshua")) {
+          return {
+            ...item,
+            chef: {
+              name: "Master Chef N. Karisa (NK)",
+              avatar: "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&q=80&w=200",
+              quote: item.chef?.quote || "Traditional cooking connects us to the heart of Rwanda."
+            }
+          };
+        }
+        return item;
+      });
+      setFoods(mappedList);
     } catch (err) {
       console.error("Failed to load foods from Firestore, falling back to static data:", err);
       setFoods(FOODS_DATA);

@@ -33,7 +33,7 @@ export function PopularFoods() {
           <div className="space-y-4">
             <h2 className="text-4xl font-extrabold text-gray-950">Most Popular Foods</h2>
             <p className="text-gray-600 max-w-xl font-medium">
-              Discover Rwanda's favorite delicacies in Kirehe. Hand-picked options curated by Joshua and local culinary masters.
+              Discover Rwanda's favorite delicacies in Kirehe. Hand-picked options curated by Executive Chef N. Karisa and local culinary masters.
             </p>
           </div>
           <div className="flex gap-4">

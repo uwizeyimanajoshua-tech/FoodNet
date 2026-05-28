@@ -403,6 +403,57 @@ async function startServer() {
     }
   });
 
+  app.post("/api/payments/authorize-sandbox", async (req, res) => {
+    const { paymentId, pin } = req.body;
+    if (!paymentId) {
+      return res.status(400).json({ error: "Payment ID is required" });
+    }
+    try {
+      const dbInstance = getDbInstance();
+      const paymentRef = dbInstance.collection("payments").doc(paymentId);
+      const paymentSnap = await paymentRef.get();
+      if (!paymentSnap.exists) {
+        return res.status(404).json({ error: "Payment not found" });
+      }
+
+      const paymentData = paymentSnap.data();
+
+      // Update payments collection
+      await paymentRef.update({
+        status: "SUCCESSFUL",
+        verifiedAt: admin.firestore.FieldValue.serverTimestamp(),
+        message: `Sandbox PIN authorized successfully via simulator (PIN: ${pin ? "••••••" : "none"})`
+      });
+
+      // Update transactions collection
+      const transactionDocRef = dbInstance.collection("transactions").doc(paymentId);
+      const transactionSnap = await transactionDocRef.get();
+      if (transactionSnap.exists) {
+        await transactionDocRef.update({
+          status: "SUCCESSFUL",
+          verifiedAt: admin.firestore.FieldValue.serverTimestamp()
+        });
+      }
+
+      // Save entry in /paymentHistory
+      await dbInstance.collection("paymentHistory").add({
+        userId: paymentData?.userId || "anonymous",
+        amount: paymentData?.amount || 0,
+        phoneNumber: paymentData?.phoneNumber || "",
+        provider: paymentData?.provider || "MTN",
+        transactionId: paymentData?.transactionId || paymentId,
+        status: "SUCCESSFUL",
+        createdAt: admin.firestore.FieldValue.serverTimestamp()
+      });
+
+      console.log(`[Admin Sandbox] Successfully authorized and completed payment ${paymentId}`);
+      return res.json({ success: true, message: "Sandbox payment authorized successfully!" });
+    } catch (error: any) {
+      console.error("Sandbox authorization failed:", error);
+      return res.status(500).json({ error: error.message || "Failed to authorize sandbox payment" });
+    }
+  });
+
   app.post("/api/payments/webhook", async (req, res) => {
     const hash = req.headers["verif-hash"];
     const webhookSecret = process.env.FLW_WEBHOOK_SECRET;

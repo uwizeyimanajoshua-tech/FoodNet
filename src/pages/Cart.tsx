@@ -26,7 +26,7 @@ export function Cart() {
           <div className="space-y-3">
             <h2 className="text-3xl font-black text-gray-900 tracking-tight">Your Cart is Empty</h2>
             <p className="text-gray-500 font-medium leading-relaxed">
-              Explore our 30+ exquisite local foods prepared by Joshua and Kirehe local master chefs right now!
+              Explore our 50+ exquisite local foods prepared by N. Karisa and Kirehe local master chefs right now!
             </p>
           </div>
           <Link to="/restaurants" className="block">

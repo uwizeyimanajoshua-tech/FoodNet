@@ -36,41 +36,41 @@ interface StreamType {
 const STREAMS_LIST: StreamType[] = [
   {
     id: "1",
-    title: "The Art of Multi-Layered French Croissants",
-    category: "Bakery / French",
-    chefName: "Chef Jean-Luc",
-    chefTitle: "French Pastry Master • Guest Instructor",
-    chefAvatar: "https://i.pravatar.cc/100?u=chef",
+    title: "The Art of Baking Sweet Rwandan Honey-millet cake",
+    category: "Bakery / Dessert",
+    chefName: "Master Chef N. Karisa (NK)",
+    chefTitle: "Executive Master Chef of FoodNet",
+    chefAvatar: "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&q=80&w=200",
     viewersCount: 3452,
-    image: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=400",
-    videoPoster: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=1200",
+    image: "https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&q=80&w=400",
+    videoPoster: "https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&q=80&w=1200",
     youtubeId: "beOzS__-XpA",
-    description: "Today we are diving into the complex art of French pastries. Join me as I show you how to get those perfect, buttery layers in your croissants. We'll be using premium ingredients that you can order directly from the shop section on your right!",
+    description: "Today we are diving into the complex art of traditional Rwandan baking. Join me as I show you how to construct the perfect, delicate Umutsima w’Uburo (Millet Cake) sweetened with premium Kirehe wild forest honey! Feel free to order the featured ingredients directly from the side menu.",
     initialChats: [
       { user: "Sarah J.", msg: "Does the butter need to be room temp?", avatar: "https://i.pravatar.cc/100?u=1" },
       { user: "Mike Chef", msg: "Wow, it looks so fluffy already!", avatar: "https://i.pravatar.cc/100?u=2" },
       { user: "FoodieLi", msg: "Just ordered the flour to follow along!", avatar: "https://i.pravatar.cc/100?u=3" },
-      { user: "Chef Jean-Luc", msg: "Welcome everyone! Yes, room temp is best.", avatar: "https://i.pravatar.cc/100?u=chef", isChef: true },
+      { user: "Chef Karisa", msg: "Welcome everyone! Yes, room temp organic butter is best.", avatar: "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&q=80&w=200", isChef: true },
       { user: "Dave R.", msg: "Can't wait to taste this!", avatar: "https://i.pravatar.cc/100?u=4" },
     ],
     simulatedReplies: [
       { user: "Clara M.", msg: "Mine is in the oven right now!", avatar: "https://i.pravatar.cc/100?u=6" },
       { user: "BakingGeek", msg: "Chef, does salted butter make a difference?", avatar: "https://i.pravatar.cc/100?u=7" },
-      { user: "Chef Jean-Luc", msg: "Unsalted is preferred so you can fully control the salt balance!", avatar: "https://i.pravatar.cc/100?u=chef", isChef: true },
-      { user: "Alex_P", msg: "Beautiful lamination layers!", avatar: "https://i.pravatar.cc/100?u=8" },
+      { user: "Chef Karisa", msg: "Unsalted is preferred so you can fully control the salt balance!", avatar: "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&q=80&w=200", isChef: true },
+      { user: "Alex_P", msg: "Beautiful rich texture!", avatar: "https://i.pravatar.cc/100?u=8" },
       { user: "FoodieLi", msg: "Oh, it's getting brown! Delicious!", avatar: "https://i.pravatar.cc/100?u=3" },
       { user: "RwandanPastry", msg: "Can you make these with sweet maize flour?", avatar: "https://i.pravatar.cc/100?u=10" },
-      { user: "Chef Jean-Luc", msg: "Maize does not develop gluten in the same way, but it creates a delightfully crumbly crust!", avatar: "https://i.pravatar.cc/100?u=chef", isChef: true },
-      { user: "Jeanne_D", msg: "Smells like a French boulevard bakery in Kigali!", avatar: "https://i.pravatar.cc/100?u=18" }
+      { user: "Chef Karisa", msg: "Millet or sorghum provides the authentic color and sweet molasses undertones!", avatar: "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&q=80&w=200", isChef: true },
+      { user: "Jeanne_D", msg: "Smells like a premium bakery in Kirehe!", avatar: "https://i.pravatar.cc/100?u=18" }
     ]
   },
   {
     id: "2",
     title: "Traditional Rwandan Isombe Masterclass",
     category: "Rwandan / Cassava",
-    chefName: "Chef Joshua",
-    chefTitle: "FoodNet Founder • Kirehe Culinary Lead",
-    chefAvatar: "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&q=80&w=200",
+    chefName: "Master Chef N. Karisa (NK)",
+    chefTitle: "Executive Master Chef of FoodNet",
+    chefAvatar: "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&q=80&w=200",
     viewersCount: 4120,
     image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&q=80&w=400",
     videoPoster: "https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&q=80&w=1200",
@@ -79,16 +79,16 @@ const STREAMS_LIST: StreamType[] = [
     initialChats: [
       { user: "Gisa L.", msg: "Pounding cassava leaves by hand looks intense! Is there a food prep shortcut?", avatar: "https://i.pravatar.cc/100?u=11" },
       { user: "Keza K.", msg: "Oh, I love Kirehe honey! Will we use pure palm oil too?", avatar: "https://i.pravatar.cc/100?u=12" },
-      { user: "Chef Joshua", msg: "Welcome guys! Yes, traditional palm oil or sunflower oil is perfect. Pounding develops the true herbal aroma!", avatar: "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&q=80&w=200", isChef: true },
+      { user: "Chef Karisa", msg: "Welcome guys! Yes, traditional palm oil or sunflower oil is perfect. Pounding develops the true herbal aroma!", avatar: "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&q=80&w=200", isChef: true },
       { user: "Muhire88", msg: "Ordered Isombe to follow along! Can't wait!", avatar: "https://i.pravatar.cc/100?u=13" },
       { user: "Eric Rwa", msg: "This smell is incredible, Kirehe's finest!", avatar: "https://i.pravatar.cc/100?u=14" },
     ],
     simulatedReplies: [
       { user: "Nshuti_P", msg: "Wow, is peak simmer time 3 or 4 hours?", avatar: "https://i.pravatar.cc/100?u=15" },
-      { user: "Chef Joshua", msg: "The longer the better! At least 2.5 hours on a gentle volcanic charcoal flame to break down fibres.", avatar: "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&q=80&w=200", isChef: true },
+      { user: "Chef Karisa", msg: "The longer the better! At least 2.5 hours on a gentle volcanic charcoal flame to break down fibres.", avatar: "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&q=80&w=200", isChef: true },
       { user: "Keza K.", msg: "Just added the Isombe to my cart, delivery is in less than 25 minutes! Kirehe courier is fast!", avatar: "https://i.pravatar.cc/100?u=12" },
       { user: "Umutoni_F", msg: "Smells like grandmother's village kitchen!", avatar: "https://i.pravatar.cc/100?u=16" },
-      { user: "Chef Joshua", msg: "Exactly, Umutoni! That is the authentic taste of 'Ubunyarwanda' hospitality.", avatar: "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&q=80&w=200", isChef: true },
+      { user: "Chef Karisa", msg: "Exactly, Umutoni! That is the authentic taste of 'Ubunyarwanda' hospitality.", avatar: "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&q=80&w=200", isChef: true },
       { user: "Kabano_E", msg: "Isombe accompanied by plantains is heavenly!", avatar: "https://i.pravatar.cc/100?u=33" }
     ]
   },
@@ -159,7 +159,7 @@ const FRENCH_PRODUCTS: FoodItem[] = [
     image: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&q=80&w=500",
     category: "Dessert",
     description: "Delicate and sweet hand-folded French buttery crescent roll baked to golden crisp perfection.",
-    chef: { name: "Chef Jean-Luc", avatar: "https://i.pravatar.cc/100?u=chef", quote: "Patience and quality butter behaves perfectly." }
+    chef: { name: "Master Chef N. Karisa (NK)", avatar: "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&q=80&w=200", quote: "Traditional baking blended with modern finesse." }
   },
   {
     id: "organic-pastry-flour",
@@ -171,7 +171,7 @@ const FRENCH_PRODUCTS: FoodItem[] = [
     image: "https://images.unsplash.com/photo-1495147466023-ac5c588e2e94?auto=format&fit=crop&q=80&w=500",
     category: "Traditional",
     description: "Super-fine wheat flour milled to perfection, ideal for pastries, rolls, and cakes.",
-    chef: { name: "Chef Jean-Luc", avatar: "https://i.pravatar.cc/100?u=chef", quote: "Fine flour holds the structure of delicate layered buttery buns." }
+    chef: { name: "Master Chef N. Karisa (NK)", avatar: "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&q=80&w=200", quote: "Healthy and robust flour holds structure perfectly." }
   }
 ];
 
