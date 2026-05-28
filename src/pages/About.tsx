@@ -1,10 +1,15 @@
 import React from "react";
 import { motion } from "motion/react";
 import { Utensils, Users, Award, Globe } from "lucide-react";
+import { SEO } from "../components/SEO";
 
 export function About() {
   return (
     <div className="pt-24 min-h-screen">
+      <SEO 
+        title="About Us | FoodNet Rwanda" 
+        description="Learn more about FoodNet Rwanda, founded by Joshua Uwizeyimana. We bridge the gap between world-class culinary expertise and food lovers with live streams and express delivery." 
+      />
       <section className="bg-orange-600 py-24 text-white">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <motion.h1 

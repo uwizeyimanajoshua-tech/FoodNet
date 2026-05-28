@@ -36,9 +36,9 @@ export function Restaurants() {
   return (
     <div className="pt-24 min-h-screen bg-gray-50/50">
       <SEO 
-        title="Discover Exquisite Kirehe Delicacies - Foods & Dishes"
-        description="Browse our curated index of fresh, authentic Kirehe dishes. Find fine traditional Isombe, Kigali Grilled Tilapia, Akabenz and more. Place your order with FoodNet."
-        keywords="Isombe, Akabenz, Tilapia, Rwandan Dishes, Restaurant Kirehe, Gastronomy Rwanda"
+        title="Restaurants in Rwanda | FoodNet"
+        description="Explore and order from premium local restaurants and master chefs in Rwanda. FoodNet connects you to authentic local cuisine delivered straight to your door."
+        keywords="food delivery Rwanda, restaurants Rwanda, order food Kigali, FoodNet Rwanda, gourmet meals"
       />
       {loading && (
         <div className="fixed inset-0 bg-white/60 backdrop-blur-xs flex items-center justify-center z-50">
@@ -134,6 +134,7 @@ export function Restaurants() {
                     <img 
                       src={food.image} 
                       alt={food.name} 
+                      loading="lazy"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
                     />
                     <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-xl flex items-center gap-1 font-extrabold text-sm text-gray-900 border border-white/20">

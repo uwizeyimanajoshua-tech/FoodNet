@@ -25,9 +25,9 @@ export function Home() {
   return (
     <div className="min-h-screen">
       <SEO 
-        title="Umutima w'Ibiryo Bishya n'Ibyiza - Kirehe Fresh Foods" 
-        description="Experience Kirehe's premier culinary platform by Joshua Uwizeyimana. Order fresh local Rwandan delicacies like Isombe, Kigali Grilled Tilapia, Akabenz and goat brochettes, watch chef live-streams, and enjoy express home delivery."
-        keywords="Isombe, Akabenz, Tilapia, Kirehe Food, Rwanda Food Delivery, Live Streams, FoodNet, Joshua Uwizeyimana"
+        title="FoodNet Rwanda | Order Food Online" 
+        description="FoodNet is a Rwanda-based online food delivery platform helping users discover restaurants and order meals quickly and easily."
+        keywords="food delivery Rwanda, restaurants Rwanda, order food Kigali, FoodNet Rwanda"
       />
       {/* Hero Slider Section */}
       <section className="relative h-[90vh] flex items-center overflow-hidden bg-gray-900">

@@ -4,6 +4,7 @@ import { motion } from "motion/react";
 import { useParams, Link } from "react-router-dom";
 import { db } from "../lib/firebase";
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
+import { SEO } from "../components/SEO";
 
 export function ChefProfile() {
   const { id } = useParams();
@@ -75,6 +76,10 @@ export function ChefProfile() {
 
   return (
     <div className="pt-24 min-h-screen bg-gray-50">
+      <SEO 
+        title={`${activeChef.name} | FoodNet Rwanda Master Chef`} 
+        description={`Meet ${activeChef.name}, master chef at FoodNet Rwanda. "${activeChef.quote}". Explore signature dishes, recipes, and live streams.`}
+      />
       {/* Cover */}
       <div className="h-64 md:h-80 bg-orange-600 w-full relative">
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>

@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import { toast } from "react-hot-toast";
 import { User, Mail, Lock, UserPlus, Chrome, ArrowRight, AlertCircle, Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { SEO } from "../components/SEO";
 
 export default function Signup() {
   const { t } = useTranslation();
@@ -54,6 +55,10 @@ export default function Signup() {
 
   return (
     <div className="min-h-screen pt-24 pb-12 flex flex-col justify-center bg-[#fdfaf6]">
+      <SEO 
+        title="Sign Up | FoodNet Rwanda" 
+        description="Create your FoodNet Rwanda account to order high-quality food, discover restaurants, and track orders in real-time."
+      />
       <div className="container mx-auto px-6">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}

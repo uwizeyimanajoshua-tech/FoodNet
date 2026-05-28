@@ -7,6 +7,7 @@ import { motion } from "motion/react";
 import { toast } from "react-hot-toast";
 import { Mail, Lock, LogIn, Github, Chrome, ArrowRight, AlertCircle, Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { SEO } from "../components/SEO";
 
 export default function Login() {
   const { t } = useTranslation();
@@ -71,6 +72,10 @@ export default function Login() {
 
   return (
     <div className="min-h-screen pt-24 pb-12 flex flex-col justify-center bg-[#fdfaf6]">
+      <SEO 
+        title="Login to FoodNet Rwanda" 
+        description="Access your FoodNet Rwanda account to order high-quality food, discover restaurants, and track orders in real-time."
+      />
       <div className="container mx-auto px-6">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}

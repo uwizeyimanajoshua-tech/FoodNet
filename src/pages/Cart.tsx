@@ -3,6 +3,7 @@ import { Trash2, Plus, Minus, ArrowRight, ShoppingBag, ShoppingCart } from "luci
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { useCart } from "../components/CartContext";
+import { SEO } from "../components/SEO";
 
 export function Cart() {
   const { 
@@ -19,6 +20,10 @@ export function Cart() {
   if (cartItems.length === 0) {
     return (
       <div className="pt-32 min-h-screen bg-gray-50 flex items-center justify-center">
+        <SEO 
+          title="Shopping Cart | FoodNet Rwanda" 
+          description="View your shopping cart on FoodNet Rwanda. Review your selected culinary items, local dishes, and proceed to checkout easily." 
+        />
         <div className="max-w-md w-full text-center px-4 space-y-8">
           <div className="w-28 h-28 bg-orange-100/50 rounded-[2.5rem] flex items-center justify-center text-orange-600 mx-auto shadow-inner">
             <ShoppingCart size={48} className="animate-pulse" />
@@ -41,6 +46,10 @@ export function Cart() {
 
   return (
     <div className="pt-24 min-h-screen bg-gray-50">
+      <SEO 
+        title="Shopping Cart | FoodNet Rwanda" 
+        description="View your shopping cart on FoodNet Rwanda. Review your selected culinary items, local dishes, and proceed to checkout easily." 
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-12">
           <div className="flex items-center gap-4">

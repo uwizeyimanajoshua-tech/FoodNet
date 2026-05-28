@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { db } from "../lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { toast } from "react-hot-toast";
+import { SEO } from "../components/SEO";
 
 export function Contact() {
   const [formData, setFormData] = useState({
@@ -42,6 +43,10 @@ export function Contact() {
 
   return (
     <div className="pt-24 min-h-screen bg-gray-50">
+      <SEO 
+        title="Contact Us | FoodNet Rwanda" 
+        description="Get in touch with FoodNet Rwanda. Whether you have questions about food delivery, restaurant partnerships, or our live chef streams, we are here to help." 
+      />
       <div className="max-w-7xl mx-auto px-4 py-16 flex flex-col items-center">
         <h1 className="text-5xl font-extrabold text-gray-900 mb-6 text-center">Get in Touch</h1>
         <p className="text-xl text-gray-500 mb-16 text-center max-w-2xl">

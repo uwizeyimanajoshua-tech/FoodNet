@@ -11,7 +11,7 @@ interface SEOProps {
 export function SEO({ title, description, keywords, image, url }: SEOProps) {
   useEffect(() => {
     // 1. Set title
-    const formattedTitle = `${title} | FoodNet Kirehe`;
+    const formattedTitle = title.includes("FoodNet") || title.includes("|") ? title : `${title} | FoodNet Rwanda`;
     document.title = formattedTitle;
 
     // 2. Helper to set/update meta tags

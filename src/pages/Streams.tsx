@@ -9,6 +9,7 @@ import { useAuth } from "../components/AuthContext";
 import { useCart } from "../components/CartContext";
 import { FOODS_DATA, FoodItem } from "../data/foods";
 import { toast } from "react-hot-toast";
+import { SEO } from "../components/SEO";
 
 interface ChatMessage {
   user: string;
@@ -415,6 +416,10 @@ export function Streams() {
 
   return (
     <div className="pt-24 min-h-screen bg-gray-50/50">
+      <SEO 
+        title="Live Culinary Masterclasses | FoodNet" 
+        description="Watch elite Rwandan chefs prepare traditional cakes, Isombe, Akabenz, and delicacies live! Interact in real-time and order listed ingredients directly."
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         
         {/* Top Banner Alert / Breadcrumb */}
