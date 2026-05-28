@@ -63,7 +63,7 @@ export function Footer() {
                 <span className="text-gray-400">{t("footer.address")}</span>
               </li>
               <li className="flex items-center gap-4">
-                <a href="https://wa.me/250728119502" target="_blank" rel="noreferrer" className="flex items-center gap-4 hover:text-orange-500 transition-colors w-full">
+                <a href="https://wa.me/250728119502" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 hover:text-orange-500 transition-colors w-full">
                   <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center shrink-0">
                     <Phone className="text-orange-600" size={20} />
                   </div>
