@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://foodnets.netlify.app/sitemap.xml
+Sitemap: https://foodnet1.foodnet.workers.dev/sitemap.xml

@@ -25,9 +25,9 @@ export function Home() {
   return (
     <div className="min-h-screen">
       <SEO 
-        title="FoodNet Rwanda | Order Food Online" 
-        description="FoodNet is a Rwanda-based online food delivery platform helping users discover restaurants and order meals quickly and easily."
-        keywords="food delivery Rwanda, restaurants Rwanda, order food Kigali, FoodNet Rwanda"
+        title="FoodNet | Discover & Order Food in Kirehe, Rwanda" 
+        description="FoodNet helps people in Kirehe discover restaurants, browse menus, and order delicious food online. Fast, simple and local food delivery in Rwanda."
+        keywords="FoodNet, Kirehe food delivery, Rwanda restaurants, online food ordering Kirehe, Kirehe restaurants, Rwanda food"
       />
       {/* Hero Slider Section */}
       <section className="relative h-[90vh] flex items-center overflow-hidden bg-gray-900">
@@ -44,7 +44,7 @@ export function Home() {
             <img 
               src={slides[currentSlide].image} 
               className="w-full h-full object-cover scale-110"
-              alt="Slide Background"
+              alt={`FoodNet food category slider depicting Kirehe Rwanda culinary delights`}
             />
           </motion.div>
         </AnimatePresence>
@@ -99,6 +99,22 @@ export function Home() {
         </div>
       </section>
 
+      {/* Search Engine Optimization Hero Content Section */}
+      <section className="bg-white py-16 border-b border-gray-100 relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-32 h-32 bg-orange-50/50 rounded-full blur-2xl -z-10" />
+        <div className="container mx-auto px-6 max-w-4xl text-center relative z-10">
+          <span className="text-[11px] font-black uppercase text-orange-600 tracking-widest bg-orange-50 px-4 py-1.5 rounded-full mb-4 inline-block">
+            Rwanda Culinary Platform
+          </span>
+          <h2 className="text-3xl md:text-4xl font-black text-gray-950 tracking-tight leading-tight mb-6">
+            FoodNet – Discover Restaurants & Order Food in Kirehe, Rwanda
+          </h2>
+          <p className="text-gray-600 font-medium text-base md:text-lg leading-relaxed max-w-3xl mx-auto">
+            Welcome to <strong className="text-orange-600">FoodNet</strong>, the premier platform for <strong className="text-gray-900">food delivery</strong> in Kirehe, Rwanda. Our mission is to connect you with the best local <strong className="text-gray-900">restaurants</strong> and culinary masters. Whether you're craving traditional Rwandan dishes like <strong className="text-gray-900">Isombe</strong> and <strong className="text-gray-900">Akabenz</strong>, or modern international creations, FoodNet ensures your meals are prepared fresh and delivered fast. Browse menus, stream live cooking shows, and enjoy secure digital checkouts right from the heart of Rwanda.
+          </p>
+        </div>
+      </section>
+
       {/* Popular Foods / Order Food Section */}
       <section className="py-24 bg-[#fdfaf6]">
         <div className="container mx-auto px-6">
@@ -133,7 +149,12 @@ export function Home() {
                 className="group p-4 bg-white rounded-[2.5rem] border border-gray-100 hover:shadow-2xl transition-all"
               >
                 <div className="relative aspect-square rounded-[2rem] overflow-hidden mb-6">
-                  <img src={food.img} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt={food.name} />
+                  <img 
+                    src={food.img} 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                    alt={`Delicious ${food.name} ready for fast food delivery in Kirehe Rwanda`}
+                    loading="lazy"
+                  />
                   <div className="absolute top-4 right-4 bg-white px-3 py-1 rounded-full text-xs font-black text-orange-600 shadow-sm uppercase tracking-widest">
                     {t("home.popular.topChoice")}
                   </div>
@@ -157,7 +178,8 @@ export function Home() {
               whileInView={{ opacity: 1, scale: 1 }}
               src="https://images.unsplash.com/photo-1517248135467-4c7ed9d421bb?w=600&fit=crop" 
               className="rounded-[2.5rem] shadow-xl w-full h-80 object-cover"
-              alt="Restaurant 1"
+              alt="Partner restaurant dining interior of FoodNet in Kirehe Rwanda"
+              loading="lazy"
             />
             <motion.img 
               initial={{ opacity: 0, scale: 0.8 }}
@@ -165,7 +187,8 @@ export function Home() {
               transition={{ delay: 0.2 }}
               src="https://images.unsplash.com/photo-1552566626-52f8b828add9?w=600&fit=crop" 
               className="rounded-[2.5rem] shadow-xl w-full h-80 object-cover mt-12"
-              alt="Restaurant 2"
+              alt="Tasty gourmet recipes and clean kitchens supported by FoodNet Kirehe Rwanda"
+              loading="lazy"
             />
           </div>
           <div>
