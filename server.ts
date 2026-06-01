@@ -520,6 +520,28 @@ async function startServer() {
     res.send("google-site-verification: google9aa97d89ba79a546.html");
   });
 
+  // Robots.txt explicit route
+  app.get("/robots.txt", (req, res) => {
+    res.setHeader("Content-Type", "text/plain; charset=utf-8");
+    const robotsPath = path.join(process.cwd(), "robots.txt");
+    if (fs.existsSync(robotsPath)) {
+      res.sendFile(robotsPath);
+    } else {
+      res.send("User-agent: *\nAllow: /\n\nSitemap: https://foodnet1.foodnet.workers.dev/sitemap.xml");
+    }
+  });
+
+  // Sitemap.xml explicit route
+  app.get("/sitemap.xml", (req, res) => {
+    res.setHeader("Content-Type", "application/xml; charset=utf-8");
+    const sitemapPath = path.join(process.cwd(), "sitemap.xml");
+    if (fs.existsSync(sitemapPath)) {
+      res.sendFile(sitemapPath);
+    } else {
+      res.status(404).send("Sitemap not found");
+    }
+  });
+
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({

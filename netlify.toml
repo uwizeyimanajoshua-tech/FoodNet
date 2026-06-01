@@ -3,6 +3,24 @@
   command = "npm run build"
 
 [[redirects]]
+  from = "/google9aa97d89ba79a546.html"
+  to = "/google9aa97d89ba79a546.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/robots.txt"
+  to = "/robots.txt"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/sitemap.xml"
+  to = "/sitemap.xml"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200

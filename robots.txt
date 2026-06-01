@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://foodnet1.foodnet.workers.dev/sitemap.xml
