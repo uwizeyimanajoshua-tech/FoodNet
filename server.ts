@@ -542,6 +542,19 @@ async function startServer() {
     }
   });
 
+  // Portable offline setup installer zip serving
+  app.get("/foodnet-portable-setup.zip", (req, res) => {
+    const distPath = path.join(process.cwd(), "dist", "foodnet-portable-setup.zip");
+    const publicPath = path.join(process.cwd(), "public", "foodnet-portable-setup.zip");
+    if (fs.existsSync(distPath)) {
+      res.download(distPath, "foodnet-portable-setup.zip");
+    } else if (fs.existsSync(publicPath)) {
+      res.download(publicPath, "foodnet-portable-setup.zip");
+    } else {
+      res.status(404).json({ error: "Portable installer setup file not built yet." });
+    }
+  });
+
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({

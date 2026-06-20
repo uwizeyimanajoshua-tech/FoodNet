@@ -6,6 +6,7 @@ import { useAuth } from "./AuthContext";
 import { useLanguage } from "./LanguageContext";
 import { useCart } from "./CartContext";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { OfflineInstallerHub } from "./OfflineInstallerHub";
 import { toast } from "react-hot-toast";
 
 interface BeforeInstallPromptEvent extends Event {
@@ -23,6 +24,7 @@ export function Navbar() {
   const { itemsCount } = useCart();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isInstallerHubOpen, setIsInstallerHubOpen] = useState(false);
   const location = useLocation();
 
   // Install Prompt PWA Events State
@@ -134,23 +136,21 @@ export function Navbar() {
           </div>
 
           <div className="flex items-center gap-4">
-            {!isAppInstalled && (
-              <button
-                onClick={triggerPwaInstall}
-                className={`p-3 rounded-2xl transition-all flex items-center justify-center gap-1.5 font-bold text-xs uppercase tracking-wider relative group ${
-                  !isScrolled && isHome 
-                    ? "bg-white/10 text-white border border-white/20 hover:bg-white hover:text-orange-600" 
-                    : "bg-orange-100 text-orange-700 hover:bg-orange-600 hover:text-white"
-                }`}
-                title="Install FoodNet App on PC or Phone"
-              >
-                <Download size={18} />
-                <span className="hidden lg:inline">Install App</span>
-                <span className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-[10px] py-1 px-2.5 rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-all whitespace-nowrap uppercase tracking-widest font-bold">
-                  Enable App Mode
-                </span>
-              </button>
-            )}
+            <button
+              onClick={() => setIsInstallerHubOpen(true)}
+              className={`p-3 rounded-2xl transition-all flex items-center justify-center gap-1.5 font-bold text-xs uppercase tracking-wider relative group ${
+                !isScrolled && isHome 
+                  ? "bg-white/10 text-white border border-white/25 hover:bg-white hover:text-orange-600" 
+                  : "bg-orange-100 text-orange-700 hover:bg-orange-600 hover:text-white"
+              }`}
+              title="Setup FoodNet Offline or on other devices"
+            >
+              <Download size={18} />
+              <span className="hidden lg:inline">Offline Setup</span>
+              <span className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-[10px] py-1 px-2.5 rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-all whitespace-nowrap uppercase tracking-widest font-bold">
+                Installer & Share Studio
+              </span>
+            </button>
 
             <LanguageSwitcher isScrolled={isScrolled} isHome={isHome} />
 
@@ -244,18 +244,16 @@ export function Navbar() {
                 </Link>
               ))}
               
-              {!isAppInstalled && (
-                <button
-                  onClick={() => {
-                    setIsMobileMenuOpen(false);
-                    triggerPwaInstall();
-                  }}
-                  className="flex items-center gap-2 text-orange-600 uppercase tracking-widest text-left font-black transition-colors"
-                >
-                  <Download size={16} />
-                  Install App
-                </button>
-              )}
+              <button
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  setIsInstallerHubOpen(true);
+                }}
+                className="flex items-center gap-2 text-orange-600 uppercase tracking-widest text-left font-black transition-colors"
+              >
+                <Download size={16} />
+                Offline Setup
+              </button>
 
               <hr className="border-gray-100" />
               {user ? (
@@ -272,6 +270,13 @@ export function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <OfflineInstallerHub
+        isOpen={isInstallerHubOpen}
+        onClose={() => setIsInstallerHubOpen(false)}
+        triggerInstall={triggerPwaInstall}
+        hasPromptEvent={!!installPromptEvent}
+      />
     </nav>
   );
 }
