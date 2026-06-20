@@ -21,15 +21,15 @@
     <meta name="keywords" content="FoodNet, online food ordering, food delivery near me, restaurant delivery app, FoodNet App, FoodNet Rwanda, food delivery, order food online, FoodNet live kitchens, Kirehe delivery" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://food-net-opal.vercel.app/" />
-    <link rel="icon" href="/favicon.ico" />
-    <link rel="manifest" href="/manifest.json" />
-    <link rel="apple-touch-icon" href="/logo.png" />
+    <link rel="icon" href="favicon.ico" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="apple-touch-icon" href="logo.png" />
 
     <!-- Service Worker Progressive Web App Registration Script -->
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
+          navigator.serviceWorker.register('sw.js')
             .then((reg) => console.log('FoodNet PWA Service Worker Registered!', reg.scope))
             .catch((err) => console.error('Service Worker registration failed:', err));
         });

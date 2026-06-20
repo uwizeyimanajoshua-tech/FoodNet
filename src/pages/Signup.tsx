@@ -68,7 +68,7 @@ export default function Signup() {
           <div className="bg-white rounded-[3rem] p-10 shadow-2xl shadow-orange-900/5 border border-gray-100">
             <div className="text-center mb-10">
               <Link to="/" className="inline-block mb-8">
-                <img src="/foodnet.png" alt="FoodNet Logo" className="h-32 w-auto mx-auto" referrerPolicy="no-referrer" />
+                <img src="foodnet.png" alt="FoodNet Logo" className="h-32 w-auto mx-auto" referrerPolicy="no-referrer" />
               </Link>
               <h1 className="text-4xl font-black tracking-tighter text-gray-950 mb-2 uppercase">{t("auth.signup.title")}</h1>
               <p className="text-gray-500 font-medium">{t("auth.signup.subtitle")}</p>

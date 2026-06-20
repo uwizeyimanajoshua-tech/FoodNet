@@ -30,7 +30,7 @@ export function LoadingScreen() {
           >
             <div className="absolute inset-0 bg-orange-100 rounded-[3rem] blur-3xl opacity-50 animate-pulse" />
             <img 
-              src="/foodnet.png" 
+              src="foodnet.png" 
               alt="FoodNet Logo" 
               className="h-48 w-auto relative z-10"
               referrerPolicy="no-referrer"

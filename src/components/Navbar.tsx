@@ -114,7 +114,7 @@ export function Navbar() {
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3 group">
             <img 
-              src="/foodnet.png" 
+              src="foodnet.png" 
               alt="FoodNet Rwanda Logo" 
               className={`h-20 w-auto transition-transform group-hover:scale-105 ${!isScrolled && isHome ? "brightness-0 invert" : ""}`}
               referrerPolicy="no-referrer"

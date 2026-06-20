@@ -497,7 +497,7 @@ const AdminDashboard = () => {
       <aside className="w-80 bg-white border-r border-gray-100 p-8 flex flex-col">
         <div className="flex items-center gap-3 mb-12">
             <Link to="/" className="hover:scale-105 transition-transform">
-                <img src="/foodnet.png" alt="FoodNet Logo" className="h-16 w-auto" referrerPolicy="no-referrer" />
+                <img src="foodnet.png" alt="FoodNet Logo" className="h-16 w-auto" referrerPolicy="no-referrer" />
             </Link>
             <h2 className="text-2xl font-black tracking-tighter text-gray-900">Admin</h2>
         </div>

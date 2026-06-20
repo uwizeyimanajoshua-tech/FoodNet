@@ -12,7 +12,7 @@ export function Footer() {
           <div className="space-y-6">
             <div className="flex items-center gap-3">
               <img 
-                src="/foodnet.png" 
+                src="foodnet.png" 
                 alt="FoodNet Rwanda Logo" 
                 className="h-16 w-auto brightness-0 invert"
                 referrerPolicy="no-referrer"

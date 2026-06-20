@@ -187,7 +187,7 @@ export function OfflineInstallerHub({ isOpen, onClose, triggerInstall, hasPrompt
                   Double-click <b className="text-orange-600">Install-FoodNet.bat</b> inside the extracted folder.
                 </li>
                 <li>
-                  Our installer automatically compiles a custom <b className="text-slate-900 font-extrabold">FoodNet.exe</b> native desktop application locally using the built-in .NET Framework compiler and adds a branded <b className="text-orange-600 font-bold">FoodNet Shortcut</b> with official app icons onto your PC Desktop!
+                  Our installer automatically registers FoodNet into your Windows Control Panel (Add or Remove Programs) and adds a branded <b className="text-orange-600 font-bold">FoodNet Shortcut</b> with official app icons onto your Desktop that opens it in standalone application mode.
                 </li>
               </ol>
             </div>
