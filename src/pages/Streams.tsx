@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { 
   Play, Heart, Share2, Users, Send, CheckCircle2, ShoppingBag, 
   Radio, Sparkles, MessageSquare, Flame, Smile, TrendingUp, 
-  BarChart3, Activity, Award, Volume2, VolumeX, AlertCircle, RefreshCw
+  BarChart3, Activity, Award, Volume2, VolumeX, AlertCircle, RefreshCw,
+  Tv, Settings, Link2, Save
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useAuth } from "../components/AuthContext";
@@ -10,6 +11,41 @@ import { useCart } from "../components/CartContext";
 import { FOODS_DATA, FoodItem } from "../data/foods";
 import { toast } from "react-hot-toast";
 import { SEO } from "../components/SEO";
+import { db } from "../lib/firebase";
+import { collection, onSnapshot, doc, setDoc, updateDoc } from "firebase/firestore";
+
+enum OperationType {
+  CREATE = 'create',
+  UPDATE = 'update',
+  DELETE = 'delete',
+  LIST = 'list',
+  GET = 'get',
+  WRITE = 'write',
+}
+
+interface FirestoreErrorInfo {
+  error: string;
+  operationType: OperationType;
+  path: string | null;
+  authInfo: {
+    userId?: string | null;
+    email?: string | null;
+  }
+}
+
+function handleFirestoreError(error: unknown, operationType: OperationType, path: string | null) {
+  const errInfo: FirestoreErrorInfo = {
+    error: error instanceof Error ? error.message : String(error),
+    authInfo: {
+      userId: null,
+      email: null,
+    },
+    operationType,
+    path
+  };
+  console.error('Firestore Error: ', JSON.stringify(errInfo));
+  throw new Error(JSON.stringify(errInfo));
+}
 
 interface ChatMessage {
   user: string;
@@ -35,6 +71,29 @@ interface StreamType {
 }
 
 const STREAMS_LIST: StreamType[] = [
+  {
+    id: "foodnet-live",
+    title: "FoodNet Official Live Kitchen Channel",
+    category: "Rwandan / Live",
+    chefName: "Chef NK & Guests",
+    chefTitle: "FoodNet Culinary Broadcaster Team",
+    chefAvatar: "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&q=80&w=200",
+    viewersCount: 2420,
+    image: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=400",
+    videoPoster: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=1200",
+    youtubeId: "UCjQipHS6TmgpwbkdBK68QWQ",
+    description: "Welcome to Kirehe kitchen's official live cooking channel! This stream integrates directly with our YouTube Live account (Channel ID: UCjQipHS6TmgpwbkdBK68QWQ, @FoodNet-v4o). When we go live to cook traditional delicacies, the stream activates here instantly!",
+    initialChats: [
+      { user: "Keza K.", msg: "Wow, is the kitchen live right now?", avatar: "https://i.pravatar.cc/100?u=12" },
+      { user: "Gisa L.", msg: "Amazing! YouTube Live integration is so clean on FoodNet!", avatar: "https://i.pravatar.cc/100?u=11" },
+      { user: "Chef Karisa", msg: "Hello community! Yes, whenever we go live on YouTube, this player streams instantly!", avatar: "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&q=80&w=200", isChef: true },
+    ],
+    simulatedReplies: [
+      { user: "Sarah J.", msg: "I love cooking along with you!", avatar: "https://i.pravatar.cc/100?u=1" },
+      { user: "Muhire88", msg: "Just subscribed on YouTube to @FoodNet-v4o!", avatar: "https://i.pravatar.cc/100?u=13" },
+      { user: "Eric Rwa", msg: "The Tilapia grill technique is awesome!", avatar: "https://i.pravatar.cc/100?u=14" }
+    ]
+  },
   {
     id: "1",
     title: "The Art of Baking Sweet Rwandan Honey-millet cake",
@@ -177,6 +236,9 @@ const FRENCH_PRODUCTS: FoodItem[] = [
 ];
 
 const getStreamFeaturedProducts = (streamId: string): FoodItem[] => {
+  if (streamId === "foodnet-live" || !streamId) {
+    return FOODS_DATA.filter(item => item.id === "isombe-rice" || item.id === "amandazi-beignets" || item.id === "grilled-tilapia");
+  }
   if (streamId === "1") {
     return FRENCH_PRODUCTS;
   }
@@ -201,9 +263,12 @@ interface HeartType {
 }
 
 export function Streams() {
-  const { user } = useAuth();
+  const { user, isAdmin, userData } = useAuth();
   const { addToCart, formatPrice } = useCart();
 
+  const isChef = userData?.role === "chef" || userData?.role === "admin" || isAdmin || (user?.email === "maraphone14@gmail.com" || user?.email === "joshua@foodnet.rw");
+
+  const [streamsList, setStreamsList] = useState<StreamType[]>(STREAMS_LIST);
   const [activeStream, setActiveStream] = useState<StreamType>(STREAMS_LIST[0]);
   const [messages, setMessages] = useState<ChatMessage[]>(STREAMS_LIST[0].initialChats);
   const [chatInput, setChatInput] = useState("");
@@ -214,6 +279,14 @@ export function Streams() {
   const [isFollowing, setIsFollowing] = useState(false);
   const [viewerCount, setViewerCount] = useState(STREAMS_LIST[0].viewersCount);
   const [isMuted, setIsMuted] = useState(true);
+
+  // Broadcaster state hooks
+  const [showBroadcasterPanel, setShowBroadcasterPanel] = useState(false);
+  const [boardTitle, setBoardTitle] = useState("");
+  const [boardYoutubeId, setBoardYoutubeId] = useState("");
+  const [boardCategory, setBoardCategory] = useState("");
+  const [boardDesc, setBoardDesc] = useState("");
+  const [selectedStreamToEdit, setSelectedStreamToEdit] = useState<string>("foodnet-live");
 
   // State for floating hearts spawned dynamically
   const [hearts, setHearts] = useState<HeartType[]>([]);
@@ -228,6 +301,72 @@ export function Streams() {
   const [sentimentHappy, setSentimentHappy] = useState<number>(92);
 
   const chatEndRef = useRef<HTMLDivElement>(null);
+
+  // 1. Live subscribe to Firestore '/livestreams' collection
+  useEffect(() => {
+    const q = collection(db, "livestreams");
+    const unsubscribe = onSnapshot(q, async (snapshot) => {
+      if (snapshot.empty) {
+        // Seeding initial stream list so they exist in DB
+        try {
+          for (const s of STREAMS_LIST) {
+            await setDoc(doc(db, "livestreams", s.id), {
+              id: s.id,
+              title: s.title,
+              category: s.category,
+              chefName: s.chefName,
+              chefTitle: s.chefTitle,
+              chefAvatar: s.chefAvatar,
+              viewersCount: s.viewersCount,
+              image: s.image,
+              videoPoster: s.videoPoster,
+              youtubeId: s.youtubeId,
+              description: s.description,
+              initialChats: s.initialChats,
+              simulatedReplies: s.simulatedReplies
+            });
+          }
+        } catch (err) {
+          console.error("Error seeding livestreams in onSnapshot:", err);
+        }
+      } else {
+        const list: StreamType[] = [];
+        snapshot.forEach((docSnap) => {
+          list.push(docSnap.data() as StreamType);
+        });
+        
+        // Sort streams list nicely: put foodnet-live first, then sorted by ID
+        list.sort((a, b) => {
+          if (a.id === "foodnet-live") return -1;
+          if (b.id === "foodnet-live") return 1;
+          return a.id.localeCompare(b.id);
+        });
+        
+        setStreamsList(list);
+
+        // Synchronize activeStream in real-time if its content was updated in the DB
+        setActiveStream(prev => {
+          const matched = list.find(s => s.id === prev.id);
+          return matched || prev;
+        });
+      }
+    }, (error) => {
+      handleFirestoreError(error, OperationType.GET, "livestreams");
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  // 2. Pre-populate broadcaster panel input form when selection changes
+  useEffect(() => {
+    const streamToEdit = streamsList.find(s => s.id === selectedStreamToEdit);
+    if (streamToEdit) {
+      setBoardTitle(streamToEdit.title);
+      setBoardYoutubeId(streamToEdit.youtubeId);
+      setBoardCategory(streamToEdit.category);
+      setBoardDesc(streamToEdit.description);
+    }
+  }, [selectedStreamToEdit, streamsList, showBroadcasterPanel]);
 
   // Synchronize viewer counts and chats when active stream changes
   useEffect(() => {
@@ -350,6 +489,64 @@ export function Streams() {
     return () => clearInterval(interval);
   }, [activeStream]);
 
+  // Save configured stream details to Firestore
+  const handleSaveStreamConfig = async () => {
+    if (!boardTitle.trim() || !boardYoutubeId.trim() || !boardCategory.trim()) {
+      toast.error("Please fill out Title, Video/Channel ID, and Category.");
+      return;
+    }
+    const tid = toast.loading("Saving stream configurations to Firestore...");
+    try {
+      const docRef = doc(db, "livestreams", selectedStreamToEdit);
+      await updateDoc(docRef, {
+        title: boardTitle.trim(),
+        youtubeId: boardYoutubeId.trim(),
+        category: boardCategory.trim(),
+        description: boardDesc.trim()
+      });
+      toast.success("Broadcasting feed updated in cloud Firestore!", { id: tid });
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to update broadcast settings. Please verify permissions.", { id: tid });
+    }
+  };
+
+  // Smart Youtube Video/Channel Embed Parser
+  const getIframeSrc = (youtubeId: string) => {
+    if (!youtubeId) return "";
+    
+    const mutedParam = isMuted ? 1 : 0;
+
+    // Check if it's a channel ID (starts with UC or is a 24-character string starting with UC)
+    if (youtubeId.startsWith("UC") || (youtubeId.length === 24 && youtubeId.startsWith("UC"))) {
+      return `https://www.youtube.com/embed/live_stream?channel=${youtubeId}&autoplay=1&mute=${mutedParam}&enablejsapi=1&rel=0&modestbranding=1&controls=1`;
+    }
+    
+    // If it's a full YouTube URL, extract video id
+    if (youtubeId.includes("youtube.com") || youtubeId.includes("youtu.be")) {
+      let extractedId = "";
+      try {
+        if (youtubeId.includes("v=")) {
+          extractedId = youtubeId.split("v=")[1]?.split("&")[0] || "";
+        } else if (youtubeId.includes("embed/")) {
+          extractedId = youtubeId.split("embed/")[1]?.split("?")[0] || "";
+        } else if (youtubeId.includes("youtu.be/")) {
+          extractedId = youtubeId.split("youtu.be/")[1]?.split("?")[0] || "";
+        } else if (youtubeId.includes("live/")) {
+          extractedId = youtubeId.split("live/")[1]?.split("?")[0] || "";
+        }
+      } catch (e) {
+        console.error("Error parsing youtube URL", e);
+      }
+      if (extractedId) {
+        return `https://www.youtube.com/embed/${extractedId}?autoplay=1&mute=${mutedParam}&enablejsapi=1&rel=0&modestbranding=1&controls=1`;
+      }
+    }
+    
+    // Standard video ID
+    return `https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=${mutedParam}&enablejsapi=1&rel=0&modestbranding=1&controls=1`;
+  };
+
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
     if (!chatInput.trim()) return;
@@ -437,6 +634,127 @@ export function Streams() {
           
           {/* Main Stream Area */}
           <div className="lg:w-2/3 space-y-8 animate-fadeIn">
+
+            {/* Chef Broadcast Control Panel */}
+            {isChef && (
+              <div className="bg-slate-900 border-2 border-orange-500 rounded-[2.5rem] p-6 shadow-xl text-white space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <Radio className="text-red-500 animate-pulse" size={24} />
+                    <div>
+                      <h3 className="font-extrabold text-white text-base">Chef Live Broadcast Deck</h3>
+                      <p className="text-[10px] text-orange-400 font-semibold tracking-wider uppercase">Active Live Feed Synced to Cloud Firestore</p>
+                    </div>
+                  </div>
+                  <button 
+                    onClick={() => setShowBroadcasterPanel(!showBroadcasterPanel)}
+                    className="bg-orange-600 hover:bg-orange-700 font-extrabold text-[11px] uppercase tracking-wider px-4 py-2.5 rounded-2xl flex items-center gap-1.5 transition-all text-white self-start sm:self-center"
+                  >
+                    <Settings size={13} />
+                    {showBroadcasterPanel ? "Hide Deck Builder" : "Configure Stream"}
+                  </button>
+                </div>
+
+                {showBroadcasterPanel && (
+                  <div className="pt-2 border-t border-slate-800 space-y-4 text-xs animate-fadeIn">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Select Channel to Broadcast Or Update</label>
+                        <select 
+                          value={selectedStreamToEdit}
+                          onChange={(e) => setSelectedStreamToEdit(e.target.value)}
+                          className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-orange-500 text-xs font-semibold"
+                        >
+                          {streamsList.map((st) => (
+                            <option key={st.id} value={st.id}>{st.title} ({st.category})</option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1.5">YouTube URL / Channel ID / Video ID</label>
+                        <div className="flex gap-2">
+                          <input 
+                            type="text" 
+                            value={boardYoutubeId} 
+                            onChange={(e) => setBoardYoutubeId(e.target.value)}
+                            placeholder="Paste Channel ID or Video link..."
+                            className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-orange-500 text-xs font-mono"
+                          />
+                          <button 
+                            type="button" 
+                            onClick={() => {
+                              setBoardYoutubeId("UCjQipHS6TmgpwbkdBK68QWQ");
+                              toast.success("Loaded Verified Channel ID!");
+                            }}
+                            className="bg-black/40 hover:bg-black/60 text-[10px] font-bold text-orange-400 border border-orange-500/30 px-3 py-1.5 rounded-xl whitespace-nowrap active:scale-[0.98] transition-all"
+                          >
+                            Use Default Channel
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Stream Title</label>
+                        <input 
+                          type="text" 
+                          value={boardTitle} 
+                          onChange={(e) => setBoardTitle(e.target.value)}
+                          placeholder="e.g. Traditional Cooking Masterclass"
+                          className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-orange-500 text-xs font-semibold"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Category</label>
+                        <input 
+                          type="text" 
+                          value={boardCategory} 
+                          onChange={(e) => setBoardCategory(e.target.value)}
+                          placeholder="e.g. Rwandan / Traditional"
+                          className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-orange-500 text-xs font-semibold"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Stream Description</label>
+                      <textarea 
+                        value={boardDesc} 
+                        onChange={(e) => setBoardDesc(e.target.value)}
+                        placeholder="Provide details about what you're cooking..."
+                        rows={3}
+                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-orange-500 text-xs font-semibold"
+                      />
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-slate-950/40 p-4 rounded-2xl border border-slate-800/60">
+                      <div className="flex gap-2">
+                        <a 
+                          href="https://studio.youtube.com/channel/UCjQipHS6TmgpwbkdBK68QWQ/livestreaming" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-[10px] bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-500/20 px-3.5 py-2 rounded-xl font-bold transition-all flex items-center gap-1.5"
+                        >
+                          <Tv size={11} />
+                          YouTube Creator Live Studio Portal
+                        </a>
+                      </div>
+                      
+                      <button 
+                        onClick={handleSaveStreamConfig}
+                        className="bg-orange-600 hover:bg-orange-700 text-white font-extrabold text-[11px] uppercase tracking-wider px-5 py-2.5 rounded-xl flex items-center gap-1.5 shadow-md shadow-orange-600/20 transition-all active:scale-95"
+                      >
+                        <Save size={13} />
+                        Go Live &amp; Update Stream Feed
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
             
             {/* YouTube Active Stream Container */}
             <div className="relative aspect-video bg-gray-950 rounded-[2.5rem] overflow-hidden shadow-2xl group border-4 border-white">
@@ -447,7 +765,7 @@ export function Streams() {
                   <iframe
                     title={activeStream.title}
                     className="w-full h-full relative z-10"
-                    src={`https://www.youtube.com/embed/${activeStream.youtubeId}?autoplay=1&mute=${isMuted ? 1 : 0}&enablejsapi=1&rel=0&modestbranding=1&controls=1&showinfo=0`}
+                    src={getIframeSrc(activeStream.youtubeId)}
                     allow="autoplay; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                   />
@@ -648,6 +966,74 @@ export function Streams() {
                 </div>
               </div>
             </div>
+
+            {/* YouTube Channel Integration Card */}
+            <div className="bg-gradient-to-br from-red-600 via-red-700 to-orange-600 text-white p-8 rounded-[2.5rem] shadow-xl shadow-red-900/10 border-4 border-white flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden select-none">
+              <div className="absolute right-0 top-0 translate-x-12 -translate-y-12 opacity-10 pointer-events-none">
+                <svg className="w-64 h-64 fill-current" viewBox="0 0 24 24">
+                  <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.11C19.516 3.545 12 3.545 12 3.545s-7.516 0-9.388.508a3.003 3.003 0 0 0-2.11 2.11c-.51 1.871-.51 5.776-.51 5.776s0 3.905.51 5.776a3.003 3.003 0 0 0 2.11 2.11c1.872.508 9.388.508 9.388.508s7.516 0 9.388-.508a3.003 3.003 0 0 0 2.11-2.11c.51-1.871.51-5.776.51-5.776s0-3.905-.51-5.776zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                </svg>
+              </div>
+              
+              <div className="space-y-3 relative z-10 flex-1">
+                <div className="flex items-center gap-2">
+                  <span className="bg-white/20 px-3.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border border-white/20">
+                    Broadcasting Station
+                  </span>
+                  <span className="bg-red-500/50 px-3.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border border-red-400/20">
+                    Verified Channel
+                  </span>
+                </div>
+                <h3 className="text-2xl font-black tracking-tight uppercase">Culinary Theater</h3>
+                <p className="text-red-100 text-xs font-semibold leading-relaxed max-w-lg">
+                  Join our official YouTube cooking community. Get notified of every traditional masterclass, street food review, and cooperative highlight stream from Lake Kirehe.
+                </p>
+                
+                <div className="flex flex-col sm:flex-row sm:items-center gap-4 pt-2">
+                  <div className="bg-black/25 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/10 flex flex-col">
+                    <span className="text-[9px] uppercase font-black tracking-wider text-red-200">YouTube Channel ID</span>
+                    <span className="font-mono text-xs font-extrabold text-white tracking-wider selection:bg-orange-500">
+                      UCjQipHS6TmgpwbkdBK68QWQ
+                    </span>
+                  </div>
+                  <div className="bg-black/25 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/10 flex flex-col">
+                    <span className="text-[9px] uppercase font-black tracking-wider text-red-200">Official Handle</span>
+                    <span className="text-xs font-bold text-white leading-normal">@FoodNet-v4o</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-2.5 shrink-0 w-full md:w-auto relative z-10 text-xs">
+                <a 
+                  href="https://www.youtube.com/@FoodNet-v4o" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="bg-white text-red-600 px-6 py-3.5 rounded-2xl font-black uppercase tracking-widest text-center shadow-lg hover:bg-red-50 active:scale-95 transition-all flex items-center justify-center gap-2"
+                >
+                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                    <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.11C19.516 3.545 12 3.545 12 3.545s-7.516 0-9.388.508a3.003 3.003 0 0 0-2.11 2.11c-.51 1.871-.51 5.776-.51 5.776s0 3.905.51 5.776a3.003 3.003 0 0 0 2.11 2.11c1.872.508 9.388.508 9.388.508s7.516 0 9.388-.508a3.003 3.003 0 0 0 2.11-2.11c.51-1.871.51-5.776.51-5.776s0-3.905-.51-5.776zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                  </svg>
+                  Subscribe on YouTube
+                </a>
+                <a 
+                  href="https://studio.youtube.com/channel/UCjQipHS6TmgpwbkdBK68QWQ/livestreaming" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3.5 rounded-2xl font-black uppercase tracking-widest text-center shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2"
+                >
+                  <Radio size={14} className="animate-pulse" />
+                  YouTube Live Control Room
+                </a>
+                <a 
+                  href="https://www.youtube.com/channel/UCjQipHS6TmgpwbkdBK68QWQ" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="bg-red-800/40 hover:bg-red-800/60 text-white border border-red-500/20 px-6 py-3.5 rounded-2xl font-black uppercase tracking-widest text-center transition-all flex items-center justify-center gap-2"
+                >
+                  Visit Channel Portal
+                </a>
+              </div>
+            </div>
           </div>
           {/* Dynamic Analytics Charts Column */}
           <div className="lg:w-1/3 flex flex-col justify-between">
@@ -834,7 +1220,7 @@ export function Streams() {
               </div>
               
               <div className="grid grid-cols-1 gap-3">
-                {STREAMS_LIST.map((ls) => {
+                {streamsList.map((ls) => {
                   const isActive = ls.id === activeStream.id;
                   return (
                     <div 

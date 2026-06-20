@@ -96,41 +96,90 @@ const AdminDashboard = () => {
       }
   });
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const compressAndResizeImage = (file: File, maxWidth = 800, maxHeight = 800, quality = 0.75): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > maxWidth) {
+              height = Math.round((height * maxWidth) / width);
+              width = maxWidth;
+            }
+          } else {
+            if (height > maxHeight) {
+              width = Math.round((width * maxHeight) / height);
+              height = maxHeight;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+
+          const ctx = canvas.getContext("2d");
+          if (!ctx) {
+            reject(new Error("Could not create drawing canvas context"));
+            return;
+          }
+
+          ctx.drawImage(img, 0, 0, width, height);
+          const compressedDataUrl = canvas.toDataURL("image/jpeg", quality);
+          resolve(compressedDataUrl);
+        };
+        img.onerror = (err) => reject(err);
+        img.src = event.target?.result as string;
+      };
+      reader.onerror = (err) => reject(err);
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.size > 2 * 1024 * 1024) {
-        toast.error("Image is too large. Choose an image under 2MB.");
+      if (file.size > 15 * 1024 * 1024) {
+        toast.error("File is too large. Image must be under 15MB.");
         return;
       }
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFoodForm(prev => ({ ...prev, image: reader.result as string }));
-        toast.success("Image loaded successfully!");
-      };
-      reader.readAsDataURL(file);
+      const toastId = toast.loading("Processing and optimizing image...");
+      try {
+        const compressedBase64 = await compressAndResizeImage(file);
+        setFoodForm(prev => ({ ...prev, image: compressedBase64 }));
+        toast.success("Image optimized and loaded successfully!", { id: toastId });
+      } catch (err) {
+        console.error("Image compression error:", err);
+        toast.error("Failed to process image.", { id: toastId });
+      }
     }
   };
 
-  const handleChefAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChefAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.size > 2 * 1024 * 1024) {
-        toast.error("Avatar is too large. Choose an image under 2MB.");
+      if (file.size > 15 * 1024 * 1024) {
+        toast.error("File is too large. Image must be under 15MB.");
         return;
       }
-      const reader = new FileReader();
-      reader.onloadend = () => {
+      const toastId = toast.loading("Processing and optimizing avatar image...");
+      try {
+        const compressedBase64 = await compressAndResizeImage(file, 256, 256, 0.8);
         setFoodForm(prev => ({ 
           ...prev, 
           chef: {
             ...(prev.chef || { name: "Master Chef N. Karisa (NK)", quote: "Traditional Rwandan culinary art." }),
-            avatar: reader.result as string
+            avatar: compressedBase64
           }
         }));
-        toast.success("Chef Profile Image uploaded successfully!");
-      };
-      reader.readAsDataURL(file);
+        toast.success("Avatar optimized and loaded successfully!", { id: toastId });
+      } catch (err) {
+        console.error("Avatar compression error:", err);
+        toast.error("Failed to process avatar image.", { id: toastId });
+      }
     }
   };
 

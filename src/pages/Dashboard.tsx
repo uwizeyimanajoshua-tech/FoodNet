@@ -20,14 +20,145 @@ import {
 import { motion } from "motion/react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../components/AuthContext";
-import { db } from "../lib/firebase";
-import { collection, query, where, orderBy, onSnapshot, limit } from "firebase/firestore";
+import { db, auth } from "../lib/firebase";
+import { collection, query, where, orderBy, onSnapshot, limit, doc, getDoc, updateDoc } from "firebase/firestore";
+import { updateProfile } from "firebase/auth";
+import { toast } from "react-hot-toast";
 
 export function Dashboard() {
   const { user, loading, isAdmin, signIn, logout } = useAuth();
   const [activeTab, setActiveTab] = useState("overview");
   const [orders, setOrders] = useState<any[]>([]);
   const [payments, setPayments] = useState<any[]>([]);
+
+  // Profile Settings States
+  const [displayName, setDisplayName] = useState("");
+  const [photoURL, setPhotoURL] = useState("");
+  const [bio, setBio] = useState("");
+  const [saving, setSaving] = useState(false);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  // Load profile details from firestore
+  React.useEffect(() => {
+    if (!user) return;
+    setDisplayName(user.displayName || "");
+    setPhotoURL(user.photoURL || "");
+
+    const fetchUserProfile = async () => {
+      try {
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          if (data.displayName) setDisplayName(data.displayName);
+          if (data.photoURL) setPhotoURL(data.photoURL);
+          if (data.bio) setBio(data.bio);
+        }
+      } catch (err) {
+        console.error("Error fetching user profile:", err);
+      }
+    };
+    fetchUserProfile();
+  }, [user]);
+
+  const compressAndResizeImage = (file: File, maxWidth = 500, maxHeight = 500, quality = 0.75): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > maxWidth) {
+              height = Math.round((height * maxWidth) / width);
+              width = maxWidth;
+            }
+          } else {
+            if (height > maxHeight) {
+              width = Math.round((width * maxHeight) / height);
+              height = maxHeight;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+
+          const ctx = canvas.getContext("2d");
+          if (!ctx) {
+            reject(new Error("Could not create drawing canvas context"));
+            return;
+          }
+
+          ctx.drawImage(img, 0, 0, width, height);
+          const compressedDataUrl = canvas.toDataURL("image/jpeg", quality);
+          resolve(compressedDataUrl);
+        };
+        img.onerror = (err) => reject(err);
+        img.src = event.target?.result as string;
+      };
+      reader.onerror = (err) => reject(err);
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 15 * 1024 * 1024) {
+        toast.error("File is too large. Image must be under 15MB.");
+        return;
+      }
+      const toastId = toast.loading("Processing and optimizing profile photo...");
+      try {
+        const base64 = await compressAndResizeImage(file, 256, 256, 0.85);
+        setPhotoURL(base64);
+        toast.success("Photo optimized successfully!", { id: toastId });
+      } catch (err) {
+        console.error("Photo processing error:", err);
+        toast.error("Failed to process photo.", { id: toastId });
+      }
+    }
+  };
+
+  const handleSaveSettings = async () => {
+    if (!user) return;
+    if (!displayName.trim()) {
+      toast.error("Display name cannot be empty.");
+      return;
+    }
+
+    setSaving(true);
+    const toastId = toast.loading("Saving changes...");
+    try {
+      // 1. Update Profile in Firebase Auth (safe check: don't write large base64 URLs to auth profile attributes)
+      const safePhotoURLForAuth = photoURL && !photoURL.startsWith("data:") && photoURL.length < 1500 ? photoURL : "";
+      await updateProfile(user, {
+        displayName: displayName.trim(),
+        photoURL: safePhotoURLForAuth
+      });
+
+      // 2. Update user doc in Firestore (where base64 is safely stored as text)
+      const userRef = doc(db, "users", user.uid);
+      await updateDoc(userRef, {
+        displayName: displayName.trim(),
+        photoURL: photoURL,
+        bio: bio.trim()
+      });
+
+      // Reload auth state to refresh header across modules if needed
+      await user.reload();
+
+      toast.success("Profile updated successfully!", { id: toastId });
+    } catch (err: any) {
+      console.error("Error updating profile:", err);
+      toast.error(err.message || "Failed to update profile.", { id: toastId });
+    } finally {
+      setSaving(false);
+    }
+  };
 
   React.useEffect(() => {
     if (!user) return;
@@ -363,22 +494,57 @@ export function Dashboard() {
             <h3 className="text-2xl font-bold text-gray-900 mb-8">Profile Settings</h3>
             <div className="space-y-6">
                <div className="flex items-center gap-6 p-6 bg-gray-50 rounded-3xl">
-                  <img src={user.photoURL || "https://i.pravatar.cc/100"} className="w-20 h-20 rounded-2xl border-4 border-white shadow-xl" alt="Profile" />
+                  <img src={photoURL || user.photoURL || "https://i.pravatar.cc/100"} className="w-20 h-20 rounded-2xl border-4 border-white shadow-xl object-cover" alt="Profile" />
                   <div>
-                    <button className="text-sm font-bold text-orange-600 hover:underline">Change Photo</button>
-                    <p className="text-xs text-gray-400 mt-1">Recommended: Square image, max 2MB</p>
+                    <button 
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="text-sm font-bold text-orange-600 hover:underline"
+                    >
+                      Change Photo
+                    </button>
+                    <input 
+                      type="file" 
+                      ref={fileInputRef} 
+                      className="hidden" 
+                      accept="image/*" 
+                      onChange={handlePhotoChange} 
+                    />
+                    <p className="text-xs text-gray-400 mt-1">Recommended: Square image, max 2MB (optimized)</p>
                   </div>
                </div>
                <div className="space-y-2">
                  <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-4">Display Name</label>
-                 <input type="text" defaultValue={user.displayName} className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 outline-none focus:ring-4 ring-orange-100 transition-all font-bold" />
+                 <input 
+                   type="text" 
+                   value={displayName} 
+                   onChange={(e) => setDisplayName(e.target.value)}
+                   className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 outline-none focus:ring-4 ring-orange-100 transition-all font-bold text-gray-850" 
+                   required
+                 />
                </div>
                <div className="space-y-2">
                  <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-4">Bio / Speciality</label>
-                 <textarea defaultValue="Master Chef specializing in Rwandan cuisine." rows={3} className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 outline-none focus:ring-4 ring-orange-100 transition-all font-bold" />
+                 <textarea 
+                   value={bio} 
+                   onChange={(e) => setBio(e.target.value)}
+                   rows={3} 
+                   className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 outline-none focus:ring-4 ring-orange-100 transition-all font-bold text-gray-850" 
+                   placeholder="e.g. Master Chef specializing in Kinyarwanda gourmet classics."
+                 />
                </div>
-               <button className="w-full bg-orange-600 text-white py-4 rounded-2xl font-bold text-lg shadow-xl shadow-orange-100 hover:bg-orange-700 transition-all">
-                  Save Changes
+               <button 
+                 type="button"
+                 disabled={saving}
+                 onClick={handleSaveSettings}
+                 className="w-full bg-orange-600 text-white py-4 rounded-2xl font-bold text-lg shadow-xl shadow-orange-100 hover:bg-orange-700 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+               >
+                 {saving ? (
+                   <>
+                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                     Saving...
+                   </>
+                 ) : "Save Changes"}
                </button>
             </div>
           </div>
@@ -394,9 +560,9 @@ export function Dashboard() {
       <aside className="w-80 bg-white border-r border-gray-100 hidden lg:block sticky top-24 h-[calc(100vh-6rem)] overflow-y-auto">
         <div className="p-10 space-y-12">
           <div className="flex items-center gap-4 p-4 bg-orange-50 rounded-3xl border border-orange-100">
-            <img src={user.photoURL || "https://i.pravatar.cc/100"} className="w-14 h-14 rounded-2xl shadow-lg" alt="Profile" />
+            <img src={photoURL || user.photoURL || "https://i.pravatar.cc/100"} className="w-14 h-14 rounded-2xl shadow-lg object-cover" alt="Profile" />
             <div className="overflow-hidden">
-              <p className="font-extrabold text-gray-900 truncate">{user.displayName}</p>
+              <p className="font-extrabold text-gray-900 truncate">{displayName || user.displayName}</p>
               <p className="text-xs text-orange-600 font-bold uppercase tracking-widest">{role}</p>
             </div>
           </div>

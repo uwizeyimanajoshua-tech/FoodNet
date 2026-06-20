@@ -4,7 +4,10 @@ import { motion } from "motion/react";
 import { User, Mail, Calendar, Shield, MapPin, Camera } from "lucide-react";
 
 export function Profile() {
-  const { user } = useAuth();
+  const { user, userData } = useAuth();
+
+  const photoToUse = userData?.photoURL || user?.photoURL;
+  const nameToUse = userData?.displayName || user?.displayName || "Food Enthusiast";
 
   return (
     <div className="min-h-screen pt-32 pb-24 bg-[#fdfaf6]">
@@ -19,8 +22,8 @@ export function Profile() {
             <div className="h-48 bg-orange-600 relative">
                 <div className="absolute -bottom-16 left-12">
                     <div className="relative">
-                        {user?.photoURL ? (
-                            <img src={user.photoURL} alt="User" className="w-32 h-32 rounded-[2.5rem] border-4 border-white shadow-xl object-cover" />
+                        {photoToUse ? (
+                            <img src={photoToUse} alt="User" className="w-32 h-32 rounded-[2.5rem] border-4 border-white shadow-xl object-cover" />
                         ) : (
                             <div className="w-32 h-32 rounded-[2.5rem] bg-gray-100 border-4 border-white shadow-xl flex items-center justify-center text-orange-600">
                                 <User size={48} />
@@ -36,7 +39,7 @@ export function Profile() {
             <div className="pt-20 pb-12 px-12">
                 <div className="flex justify-between items-start mb-12">
                     <div>
-                        <h1 className="text-4xl font-black text-gray-950 tracking-tight mb-2">{user?.displayName || "Food Enthusiast"}</h1>
+                        <h1 className="text-4xl font-black text-gray-950 tracking-tight mb-2">{nameToUse}</h1>
                         <p className="text-gray-500 font-medium">@foodnet_member</p>
                     </div>
                     <button className="px-8 py-3 bg-gray-900 text-white rounded-2xl font-bold hover:bg-orange-600 transition-all shadow-xl shadow-gray-900/20">

@@ -12,12 +12,21 @@ import {
 } from "firebase/auth";
 import { auth, db } from "../lib/firebase";
 import firebaseConfig from "../../firebase-applet-config.json";
-import { doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs, limit } from "firebase/firestore";
+import { doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs, limit, onSnapshot } from "firebase/firestore";
+
+interface AuthUserData {
+  displayName?: string;
+  photoURL?: string;
+  bio?: string;
+  role?: string;
+  email?: string;
+}
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   isAdmin: boolean;
+  userData: AuthUserData | null;
   signIn: () => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, username: string) => Promise<void>;
@@ -31,16 +40,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [userData, setUserData] = useState<AuthUserData | null>(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (activeUser) => {
+    let unsubscribeDoc: (() => void) | undefined;
+
+    const unsubscribeAuth = onAuthStateChanged(auth, async (activeUser) => {
+      // Clean up previous doc listener if any
+      if (unsubscribeDoc) {
+        unsubscribeDoc();
+        unsubscribeDoc = undefined;
+      }
+
       if (activeUser) {
         setUser(activeUser);
-        // Sync user to Firestore
+        const userRef = doc(db, "users", activeUser.uid);
+        
+        // Ensure user document exists in Firestore
         try {
-          const userRef = doc(db, "users", activeUser.uid);
           const userSnap = await getDoc(userRef);
-          
           if (!userSnap.exists()) {
             const isDefaultAdmin = activeUser.email === "maraphone14@gmail.com" || 
                                   activeUser.email === "joshua@foodnet.rw";
@@ -49,32 +67,45 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             await setDoc(userRef, {
               uid: activeUser.uid,
               email: activeUser.email,
-              displayName: activeUser.displayName,
-              photoURL: activeUser.photoURL,
+              displayName: activeUser.displayName || "",
+              photoURL: activeUser.photoURL || "",
               role: role,
               status: "active",
               createdAt: serverTimestamp(),
             }, { merge: true });
-            setIsAdmin(isDefaultAdmin);
-          } else {
-            const userData = userSnap.data();
-            setIsAdmin(userData?.role === "admin" || 
-                       activeUser.email === "maraphone14@gmail.com" || 
-                       activeUser.email === "joshua@foodnet.rw");
           }
         } catch (err) {
-          console.error("Error syncing user data:", err);
-          // If we can't check firestore, fallback to email check if possible
-          setIsAdmin(activeUser.email === "maraphone14@gmail.com");
+          console.error("Error creating initial user doc:", err);
         }
+
+        // Live snap listener for real-time profile mapping
+        unsubscribeDoc = onSnapshot(userRef, (snapshot) => {
+          if (snapshot.exists()) {
+            const data = snapshot.data() as AuthUserData;
+            setUserData(data);
+            setIsAdmin(data.role === "admin" || 
+                      activeUser.email === "maraphone14@gmail.com" || 
+                      activeUser.email === "joshua@foodnet.rw");
+          } else {
+            setUserData(null);
+            setIsAdmin(activeUser.email === "maraphone14@gmail.com" || activeUser.email === "joshua@foodnet.rw");
+          }
+        }, (err) => {
+          console.error("User doc snapshot error:", err);
+        });
+
       } else {
         setUser(null);
+        setUserData(null);
         setIsAdmin(false);
       }
       setLoading(false);
     });
 
-    return () => unsubscribe();
+    return () => {
+      unsubscribeAuth();
+      if (unsubscribeDoc) unsubscribeDoc();
+    };
   }, []);
 
   const signIn = async () => {
@@ -185,7 +216,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = () => signOut(auth);
 
   return (
-    <AuthContext.Provider value={{ user, loading, isAdmin, signIn, signInWithEmail, signUp, resetPassword, logout }}>
+    <AuthContext.Provider value={{ user, loading, isAdmin, userData, signIn, signInWithEmail, signUp, resetPassword, logout }}>
       {children}
     </AuthContext.Provider>
   );

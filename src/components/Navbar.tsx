@@ -8,7 +8,7 @@ import { useCart } from "./CartContext";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 
 export function Navbar() {
-  const { user, logout, isAdmin } = useAuth();
+  const { user, logout, isAdmin, userData } = useAuth();
   const { t } = useLanguage();
   const { itemsCount } = useCart();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -76,14 +76,14 @@ export function Navbar() {
             {user ? (
               <div className="relative group">
                 <button className={`flex items-center gap-3 p-1 pr-4 rounded-full border transition-all ${!isScrolled && isHome ? "bg-white/10 border-white/20 text-white" : "bg-gray-50 border-gray-100 text-gray-900"}`}>
-                  {user.photoURL ? (
-                    <img src={user.photoURL} className="w-8 h-8 rounded-full border-2 border-white" alt="User" />
+                  {userData?.photoURL || user.photoURL ? (
+                    <img src={userData?.photoURL || user.photoURL} className="w-8 h-8 rounded-full border-2 border-white object-cover" alt="User" />
                   ) : (
                     <div className="w-8 h-8 rounded-full bg-orange-600 flex items-center justify-center text-white text-xs font-black">
-                      {user.displayName?.charAt(0).toUpperCase()}
+                      {(userData?.displayName || user.displayName || "")?.charAt(0).toUpperCase()}
                     </div>
                   )}
-                  <span className="text-sm font-bold hidden lg:block">{user.displayName?.split(' ')[0]}</span>
+                  <span className="text-sm font-bold hidden lg:block">{(userData?.displayName || user.displayName || "")?.split(' ')[0]}</span>
                   <ChevronDown size={14} className="opacity-50" />
                 </button>
 
