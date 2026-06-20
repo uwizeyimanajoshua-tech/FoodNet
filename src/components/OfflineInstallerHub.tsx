@@ -120,16 +120,22 @@ export function OfflineInstallerHub({ isOpen, onClose, triggerInstall, hasPrompt
                 <div className="mt-5">
                   <button
                     onClick={async () => {
+                      // Immediately initiate the portable installer ZIP download
+                      handleDownloadZip();
+                      
+                      // Attempt native PWA installation if supported by the browser
                       if (hasPromptEvent) {
-                        onClose();
-                        await triggerInstall();
-                      } else {
-                        toast.error("Please use default Chrome/Safari share menu for manual screen addition.");
+                        try {
+                          await triggerInstall();
+                        } catch (pwaErr) {
+                          console.log("PWA prompt interaction", pwaErr);
+                        }
                       }
+                      onClose();
                     }}
-                    className="w-full py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all cursor-pointer shadow-lg shadow-orange-600/10"
+                    className="w-full py-3 bg-orange-600 hover:bg-orange-750 text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all cursor-pointer shadow-lg shadow-orange-600/10 animate-bounce"
                   >
-                    {hasPromptEvent ? "Install Directly" : "Use Manual Install"}
+                    Install Now
                   </button>
                 </div>
               </div>
@@ -164,24 +170,24 @@ export function OfflineInstallerHub({ isOpen, onClose, triggerInstall, hasPrompt
               <div className="flex items-center gap-2">
                 <Laptop size={16} className="text-slate-500" />
                 <h3 className="text-xs font-black uppercase tracking-wider text-slate-700">
-                  How To Setup Offline on Another Phone / PC
+                  How To Instantly Create "FoodNet.exe" App Offline
                 </h3>
               </div>
               <ol className="text-xs text-gray-500 font-bold space-y-3 list-decimal list-inside pl-1 leading-relaxed">
                 <li>
-                  Click <span className="text-slate-800 font-extrabold text-[11px] underline">Download Setup ZIP</span> to save <b className="text-slate-900 font-bold">foodnet-portable-setup.zip</b>.
+                  Click <span className="text-slate-850 font-extrabold text-[11px] underline">Download Setup ZIP</span> to bundle and save <b className="text-slate-900 font-bold">foodnet-portable-setup.zip</b>.
                 </li>
                 <li>
-                  Copy the downloaded ZIP file to the other device via Bluetooth, Flash OTG Drive, or local file sharing.
+                  Transfer or copy the ZIP file to any Windows computer or offline device.
                 </li>
                 <li>
-                  Unzip/Extract the file on that destination device.
+                  Extract/Unzip the contents to a folder of your choice.
                 </li>
                 <li>
-                  Double-click <b className="text-orange-600">index.html</b> in the extracted folder to open the static store locally.
+                  Double-click <b className="text-orange-600">Install-FoodNet.bat</b> inside the extracted folder.
                 </li>
                 <li>
-                  Your local browser will open FoodNet, register the Offline Service Worker, and display an <b className="text-slate-800">"Install FoodNet"</b> option inside your browser address bar or menu!
+                  Our installer automatically compiles a custom <b className="text-slate-900 font-extrabold">FoodNet.exe</b> native desktop application locally using the built-in .NET Framework compiler and adds a branded <b className="text-orange-600 font-bold">FoodNet Shortcut</b> with official app icons onto your PC Desktop!
                 </li>
               </ol>
             </div>

@@ -36,8 +36,13 @@ try {
 
   // Add files to ZIP
   for (const file of files) {
-    // Skip backend server bundles to keep client setup minimal and confidential
-    if (file.relativePath.startsWith('server.cjs') || file.relativePath.startsWith('server.js') || file.relativePath.endsWith('.map')) {
+    // Skip backend server bundles, source maps, and any existing zip installers to avoid cyclic corruption
+    if (
+      file.relativePath.startsWith('server.cjs') || 
+      file.relativePath.startsWith('server.js') || 
+      file.relativePath.endsWith('.map') ||
+      file.relativePath.endsWith('.zip')
+    ) {
       continue;
     }
     const content = fs.readFileSync(file.fullPath);
