@@ -527,7 +527,7 @@ async function startServer() {
     if (fs.existsSync(robotsPath)) {
       res.sendFile(robotsPath);
     } else {
-      res.send("User-agent: *\nAllow: /\n\nSitemap: https://foodnet1.foodnet.workers.dev/sitemap.xml");
+      res.send("User-agent: *\nAllow: /\n\nSitemap: https://food-net-opal.vercel.app/sitemap.xml");
     }
   });
 
