@@ -517,7 +517,7 @@ async function startServer() {
   // Google Search Console Verification File Explicit Route
   app.get("/google9aa97d89ba79a546.html", (req, res) => {
     res.setHeader("Content-Type", "text/html; charset=utf-8");
-    res.send("google-site-verification: google9aa97d89ba79a546");
+    res.send("google-site-verification: google9aa97d89ba79a546.html");
   });
 
   // Robots.txt explicit route
