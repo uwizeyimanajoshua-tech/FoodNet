@@ -1,0 +1,35 @@
+{
+  "short_name": "FoodNet",
+  "name": "FoodNet - Interactive Live Video Food Ordering",
+  "description": "Order delicious local and premium food and watch interactive live cooking broadcasts directly from Kirehe and Kigali kitchens.",
+  "id": "/",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#df6a27",
+  "theme_color": "#ea580c",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/foodnet.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

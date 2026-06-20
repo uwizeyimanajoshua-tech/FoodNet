@@ -1,11 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, ShoppingCart, User, Search, Play, LogOut, ShieldCheck, ChevronDown, Shield } from "lucide-react";
+import { Menu, X, ShoppingCart, User, Search, Play, LogOut, ShieldCheck, ChevronDown, Shield, Download, Smartphone } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useAuth } from "./AuthContext";
 import { useLanguage } from "./LanguageContext";
 import { useCart } from "./CartContext";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { toast } from "react-hot-toast";
+
+interface BeforeInstallPromptEvent extends Event {
+  readonly platforms: string[];
+  readonly userChoice: Promise<{
+    outcome: "accepted" | "dismissed";
+    platform: string;
+  }>;
+  prompt(): Promise<void>;
+}
 
 export function Navbar() {
   const { user, logout, isAdmin, userData } = useAuth();
@@ -15,6 +25,10 @@ export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
 
+  // Install Prompt PWA Events State
+  const [installPromptEvent, setInstallPromptEvent] = useState<BeforeInstallPromptEvent | null>(null);
+  const [isAppInstalled, setIsAppInstalled] = useState(false);
+
   const isHome = location.pathname === "/";
 
   useEffect(() => {
@@ -22,6 +36,64 @@ export function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Listen to beforeinstallprompt
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+      setInstallPromptEvent(e as BeforeInstallPromptEvent);
+    };
+
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+
+    // Detect if app is launched as a standalone PWA
+    if (window.matchMedia("(display-mode: standalone)").matches || (window.navigator as any).standalone) {
+      setIsAppInstalled(true);
+    }
+
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    };
+  }, []);
+
+  const triggerPwaInstall = async () => {
+    if (installPromptEvent) {
+      try {
+        await installPromptEvent.prompt();
+        const choiceResult = await installPromptEvent.userChoice;
+        if (choiceResult.outcome === "accepted") {
+          toast.success("Thank you for installing FoodNet App!");
+          setIsAppInstalled(true);
+        } else {
+          toast.error("Installation canceled.");
+        }
+        setInstallPromptEvent(null);
+      } catch (err) {
+        console.error("Installation prompt failed:", err);
+      }
+    } else {
+      // Guide iOS or desktop Chrome users manually when e.prompt is not natively accessible
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+      if (isIOS) {
+        toast.custom((tb) => (
+          <div className="bg-white border-2 border-orange-500 rounded-3xl p-5 shadow-2xl flex flex-col gap-2 max-w-sm">
+            <div className="flex items-center gap-2 text-orange-600 font-extrabold text-sm uppercase">
+              <Smartphone size={18} />
+              Install FoodNet App on iOS
+            </div>
+            <p className="text-xs font-semibold text-gray-600">
+              To install on your iPhone/iPad, click the <b className="text-gray-900 text-sm">"Share"</b> icon (box with pointing up arrow) in Safari browser, and select <b className="text-gray-900 text-sm">"Add to Home Screen"</b>.
+            </p>
+          </div>
+        ), { duration: 10000 });
+      } else {
+        toast.success("To install: Look for the 'App Install' icon in your browser's address/search bar (usually a terminal or + download monitor)!", {
+          duration: 6000,
+          icon: "💡",
+        });
+      }
+    }
+  };
 
   const navLinks = [
     { name: t("nav.home"), path: "/" },
@@ -62,6 +134,24 @@ export function Navbar() {
           </div>
 
           <div className="flex items-center gap-4">
+            {!isAppInstalled && (
+              <button
+                onClick={triggerPwaInstall}
+                className={`p-3 rounded-2xl transition-all flex items-center justify-center gap-1.5 font-bold text-xs uppercase tracking-wider relative group ${
+                  !isScrolled && isHome 
+                    ? "bg-white/10 text-white border border-white/20 hover:bg-white hover:text-orange-600" 
+                    : "bg-orange-100 text-orange-700 hover:bg-orange-600 hover:text-white"
+                }`}
+                title="Install FoodNet App on PC or Phone"
+              >
+                <Download size={18} />
+                <span className="hidden lg:inline">Install App</span>
+                <span className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-[10px] py-1 px-2.5 rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-all whitespace-nowrap uppercase tracking-widest font-bold">
+                  Enable App Mode
+                </span>
+              </button>
+            )}
+
             <LanguageSwitcher isScrolled={isScrolled} isHome={isHome} />
 
             <Link to="/cart" className={`p-3 rounded-2xl transition-all relative ${!isScrolled && isHome ? "bg-white/10 text-white" : "bg-gray-100 text-gray-600 hover:bg-orange-50 hover:text-orange-600"}`}>
@@ -153,6 +243,20 @@ export function Navbar() {
                   {link.name}
                 </Link>
               ))}
+              
+              {!isAppInstalled && (
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    triggerPwaInstall();
+                  }}
+                  className="flex items-center gap-2 text-orange-600 uppercase tracking-widest text-left font-black transition-colors"
+                >
+                  <Download size={16} />
+                  Install App
+                </button>
+              )}
+
               <hr className="border-gray-100" />
               {user ? (
                 <>

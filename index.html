@@ -15,27 +15,39 @@
     <meta name="google-site-verification" content="7BUg_II18DXu2lO6pNvxdcNiYUMjPfYdvtwZRtm90MA" />
 
     <!-- Primary SEO Metadata -->
-    <title>FoodNet | Discover & Order Food in Kirehe, Rwanda</title>
-    <meta name="description" content="FoodNet helps people in Kirehe discover restaurants, browse menus, and order delicious food online. Fast, simple and local food delivery in Rwanda." />
-    <meta name="keywords" content="FoodNet, Kirehe food delivery, Rwanda restaurants, online food ordering Kirehe, Kirehe restaurants, Rwanda food" />
+    <title>FoodNet | #1 Online Food Ordering & Restaurant Delivery App</title>
+    <meta name="description" content="Welcome to FoodNet, the leading online food ordering and restaurant delivery app. Get rapid food delivery near me in Kirehe, Kigali, and all across Rwanda. Order gourmet local cuisine and watch interactive kitchen live streams." />
+    <meta name="keywords" content="FoodNet, online food ordering, food delivery near me, restaurant delivery app, FoodNet App, FoodNet Rwanda, food delivery, order food online, FoodNet live kitchens, Kirehe delivery" />
     <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://foodnet1.foodnet.workers.dev/" />
+    <link rel="canonical" href="https://food-net-opal.vercel.app/" />
     <link rel="icon" href="/favicon.ico" />
+    <link rel="manifest" href="/manifest.json" />
     <link rel="apple-touch-icon" href="/logo.png" />
 
+    <!-- Service Worker Progressive Web App Registration Script -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((reg) => console.log('FoodNet PWA Service Worker Registered!', reg.scope))
+            .catch((err) => console.error('Service Worker registration failed:', err));
+        });
+      }
+    </script>
+
     <!-- Open Graph / Facebook Link Preview Preview -->
-    <meta property="og:title" content="FoodNet | Discover & Order Food in Kirehe" />
-    <meta property="og:description" content="Find restaurants, browse menus and order food online in Kirehe, Rwanda with FoodNet." />
+    <meta property="og:title" content="FoodNet | #1 Online Food Ordering & Restaurant Delivery App" />
+    <meta property="og:description" content="Experience effortless online food ordering with FoodNet. Get fast food delivery near me, stream live chef cooking broadcasts, and order delicacies across Rwanda." />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="FoodNet" />
-    <meta property="og:url" content="https://foodnet1.foodnet.workers.dev/" />
-    <meta property="og:image" content="https://foodnet1.foodnet.workers.dev/logo.png" />
+    <meta property="og:url" content="https://food-net-opal.vercel.app/" />
+    <meta property="og:image" content="https://food-net-opal.vercel.app/logo.png" />
 
     <!-- Twitter Rich Link Preview -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="FoodNet Kirehe" />
-    <meta name="twitter:description" content="Order food online in Kirehe with FoodNet" />
-    <meta name="twitter:image" content="https://foodnet1.foodnet.workers.dev/logo.png" />
+    <meta name="twitter:title" content="FoodNet | Fast Online Food Ordering & Delivery" />
+    <meta name="twitter:description" content="Use FoodNet, the premier restaurant delivery app. Get rapid food delivery near you." />
+    <meta name="twitter:image" content="https://food-net-opal.vercel.app/logo.png" />
 
     <!-- Web Application & Device Settings -->
     <meta name="theme-color" content="#ea580c" />
@@ -49,16 +61,16 @@
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "FoodNet",
-      "url": "https://foodnet1.foodnet.workers.dev/",
-      "logo": "https://foodnet1.foodnet.workers.dev/logo.png",
-      "description": "FoodNet helps users in Kirehe discover restaurants and order food online.",
+      "url": "https://food-net-opal.vercel.app/",
+      "logo": "https://food-net-opal.vercel.app/logo.png",
+      "description": "FoodNet is Rwanda's ultimate online food ordering platform and restaurant delivery app incorporating interactive video live streams.",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Kirehe",
         "addressRegion": "Eastern Province",
         "addressCountry": "RW"
       },
-      "areaServed": "Kirehe, Rwanda"
+      "areaServed": ["Kirehe", "Kigali", "Rwanda"]
     }
     </script>
 
@@ -68,7 +80,7 @@
       "@type": "WebSite",
       "name": "FoodNet",
       "alternateName": "FoodNet Rwanda",
-      "url": "https://foodnet1.foodnet.workers.dev/"
+      "url": "https://food-net-opal.vercel.app/"
     }
     </script>
   </head>
